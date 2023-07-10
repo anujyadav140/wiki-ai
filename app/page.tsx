@@ -1,9 +1,9 @@
-import Search from './components/search'
+import HomePage from "./pages/home";
 
 export default function Home() {
   return (
     <main>  
-    <Search />
+    <HomePage />
     </main>
   )
 }
