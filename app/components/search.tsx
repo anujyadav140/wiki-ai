@@ -137,12 +137,13 @@ function Search() {
                       onClick={() => handleItemClick(suggestion)}
                     >
                       {/* {window.innerWidth >= 799 && images[index] && (      )} */}
+                      {!(images[index] == "") ? (
                       <img
-                        src={images[index]}
-                        alt={suggestion}
-                        className="w-40 h-40 object-cover rounded-md mr-4"
-                      />
-
+                      src={images[index]}
+                      alt={suggestion}
+                      className="w-40 h-40 object-cover rounded-md mr-4"
+                    />
+                      ) : null}
                       <div>
                         {suggestion}
                         <br />
