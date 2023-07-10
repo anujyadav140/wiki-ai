@@ -89,7 +89,6 @@ function Search() {
       className={!isMobileScreen ? "mt-40 ml-40 mr-40" : "mt-10 ml-10 mr-10"}
     >
       {!isMobileScreen ? (
-        // Render mobile UI
         <div className="relative w-300">
           <form>
             <div className="relative group">
@@ -133,22 +132,17 @@ function Search() {
                     key={index}
                   >
                     <li
-                      className="flex items-start text-sm font-medium text-gray-600 rounded-md bg-white bg-opacity-30 backdrop-filter backdrop-blur-lg p-4 hover:bg-opacity-40 hover:bg-white hover:backdrop-blur-lg shadow-lg shadow-indigo"
+                      className="flex items-start text-sm font-medium text-gray-600 rounded-md bg-white bg-opacity-30 backdrop-filter backdrop-blur-lg p-4 hover:bg-white hover:backdrop-blur-lg shadow-lg shadow-indigo"
                       onClick={() => handleItemClick(suggestion)}
                     >
                       {!(images[index] == "") ? (
-                    //   <img
-                    //   src={images[index]}
-                    //   alt={suggestion}
-                    //   className="w-40 h-40 object-cover rounded-md mr-4"
-                    // />
-                    <Image 
-                    src={images[index]}
-                      alt={suggestion}
-                      className="w-40 h-40 object-cover rounded-md mr-4"
-                      width={500}
-                      height={500}
-                    />
+                        <Image
+                          src={images[index]}
+                          alt={suggestion}
+                          className="w-40 h-40 object-cover rounded-md mr-4"
+                          width={500}
+                          height={500}
+                        />
                       ) : null}
                       <div>
                         {suggestion}
@@ -161,7 +155,7 @@ function Search() {
                         >
                           {links[index]}
                         </a>
-                        <p className="text-xs text-gray-500 mt-1">
+                        <p className="text-sm text-gray-500 mt-1 hover:text-black">
                           {extracts[index]}
                         </p>
                       </div>
@@ -216,25 +210,20 @@ function Search() {
                     key={index}
                   >
                     <li
-                      className="flex items-start text-sm font-medium text-gray-600 rounded-md bg-white bg-opacity-30 backdrop-filter backdrop-blur-lg p-4 hover:bg-opacity-40 hover:bg-white hover:backdrop-blur-lg shadow-lg shadow-indigo"
+                      className="flex items-start text-sm font-medium text-gray-600 rounded-md bg-white backdrop-filter backdrop-blur-lg p-4 hover:bg-opacity-40 hover:bg-white hover:backdrop-blur-lg shadow-lg shadow-indigo"
                       onClick={() => handleItemClick(suggestion)}
                     >
-                      {/* <img
+                      <Image
                         src={images[index]}
                         alt={suggestion}
                         className="w-20 h-20 object-cover rounded-md mr-4"
-                      /> */}
-                       <Image 
-                    src={images[index]}
-                      alt={suggestion}
-                      className="w-20 h-20 object-cover rounded-md mr-4"
-                      width={500}
-                      height={500}
-                    />
+                        width={500}
+                        height={500}
+                      />
                       <div>
                         {suggestion}
                         <br />
-                        <p className="text-xs text-gray-500 mt-1">
+                        <p className="text-xs text-gray-500 mt-1 hover:text-black">
                           {extracts[index]}
                         </p>
                       </div>
