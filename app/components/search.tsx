@@ -210,20 +210,22 @@ function Search() {
                     key={index}
                   >
                     <li
-                      className="flex items-start text-sm font-medium text-gray-600 rounded-md bg-white backdrop-filter backdrop-blur-lg p-4 hover:bg-opacity-40 hover:bg-white hover:backdrop-blur-lg shadow-lg shadow-indigo"
+                      className="flex items-start text-sm font-medium text-black rounded-md bg-white backdrop-filter backdrop-blur-lg p-4  hover:bg-white hover:backdrop-blur-lg shadow-lg shadow-indigo"
                       onClick={() => handleItemClick(suggestion)}
                     >
-                      <Image
-                        src={images[index]}
-                        alt={suggestion}
-                        className="w-20 h-20 object-cover rounded-md mr-4"
-                        width={500}
-                        height={500}
-                      />
+                    {!(images[index] == "") ? (
+                        <Image
+                          src={images[index]}
+                          alt={suggestion}
+                          className="w-20 h-20 object-cover rounded-md mr-4"
+                          width={500}
+                          height={500}
+                        />
+                      ) : null}
                       <div>
                         {suggestion}
                         <br />
-                        <p className="text-xs text-gray-500 mt-1 hover:text-black">
+                        <p className="text-xs text-black mt-1 hover:text-black">
                           {extracts[index]}
                         </p>
                       </div>
