@@ -1,7 +1,6 @@
 "use client";
 import Image from "next/image";
 import React, { useState, ChangeEvent, useEffect } from "react";
-import { AiOutlineFileSearch } from "react-icons/ai";
 import { motion, AnimatePresence } from "framer-motion";
 
 function Search() {
