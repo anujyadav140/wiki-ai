@@ -136,12 +136,18 @@ function Search() {
                       className="flex items-start text-sm font-medium text-gray-600 rounded-md bg-white bg-opacity-30 backdrop-filter backdrop-blur-lg p-4 hover:bg-opacity-40 hover:bg-white hover:backdrop-blur-lg shadow-lg shadow-indigo"
                       onClick={() => handleItemClick(suggestion)}
                     >
-                      {/* {window.innerWidth >= 799 && images[index] && (      )} */}
                       {!(images[index] == "") ? (
-                      <img
-                      src={images[index]}
+                    //   <img
+                    //   src={images[index]}
+                    //   alt={suggestion}
+                    //   className="w-40 h-40 object-cover rounded-md mr-4"
+                    // />
+                    <Image 
+                    src={images[index]}
                       alt={suggestion}
                       className="w-40 h-40 object-cover rounded-md mr-4"
+                      width={500}
+                      height={500}
                     />
                       ) : null}
                       <div>
@@ -213,11 +219,18 @@ function Search() {
                       className="flex items-start text-sm font-medium text-gray-600 rounded-md bg-white bg-opacity-30 backdrop-filter backdrop-blur-lg p-4 hover:bg-opacity-40 hover:bg-white hover:backdrop-blur-lg shadow-lg shadow-indigo"
                       onClick={() => handleItemClick(suggestion)}
                     >
-                      <img
+                      {/* <img
                         src={images[index]}
                         alt={suggestion}
                         className="w-20 h-20 object-cover rounded-md mr-4"
-                      />
+                      /> */}
+                       <Image 
+                    src={images[index]}
+                      alt={suggestion}
+                      className="w-20 h-20 object-cover rounded-md mr-4"
+                      width={500}
+                      height={500}
+                    />
                       <div>
                         {suggestion}
                         <br />
