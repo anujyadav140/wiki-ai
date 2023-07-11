@@ -2,6 +2,7 @@
 import Image from "next/image";
 import React, { useState, ChangeEvent, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import Link from "next/link";
 
 function Search() {
   const [searchQuery, setSearchQuery] = useState("");
@@ -84,16 +85,18 @@ function Search() {
   }, []);
 
   return (
-    <div className={!isMobileScreen ? "mt-32 ml-40 mr-40" : "mt-10 ml-10 mr-10"}>
+    <div
+      className={!isMobileScreen ? "ml-40 mr-40 mt-32" : "ml-10 mr-10 mt-10"}
+    >
       {!isMobileScreen ? (
-        <div className="relative w-300">
+        <div className="w-300 relative">
           <form>
-            <div className="relative group">
-              <div className="absolute inset-1 bg-gradient-to-r from-pink-600 to-indigo-600 rounded-lg blur-lg opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200 animate-tilt"></div>
+            <div className="group relative">
+              <div className="absolute inset-1 animate-tilt rounded-lg bg-gradient-to-r from-pink-600 to-indigo-600 opacity-75 blur-lg transition duration-1000 group-hover:opacity-100 group-hover:duration-200"></div>
               <div className="relative flex justify-between overflow-hidden rounded-md bg-white shadow shadow-black/20">
                 <input
                   type="text"
-                  className="block w-full flex-1 py-3 px-4 focus:outline-none"
+                  className="block w-full flex-1 px-4 py-3 focus:outline-none"
                   placeholder="Search Wikipedia Articles ..."
                   value={searchQuery}
                   onChange={handleChange}
@@ -119,59 +122,67 @@ function Search() {
               </div>
             </div>
           </form>
-          <div className=" mt-2 mb-10 w-full max-h-80 overflow-y-auto overflow-x-hidden">
-            {suggestions.length > 0 && (
-              <ul className="mt-4 w-full grid gap-4 h-full">
-                {suggestions.map((suggestion, index) => (
-                  <motion.div
-                    whileHover={{ scale: 1.02 }}
-                    transition={{ type: "spring", stiffness: 100, damping: 10 }}
-                    key={index}
-                  >
-                    <li
-                      className="flex items-start text-sm font-medium text-gray-600 rounded-md bg-white bg-opacity-30 backdrop-filter backdrop-blur-lg p-4 hover:bg-white hover:backdrop-blur-lg shadow-lg shadow-indigo"
-                      onClick={() => handleItemClick(suggestion)}
-                    >
-                      {!(images[index] == "") ? (
-                        <Image
-                          src={images[index]}
-                          alt={suggestion}
-                          className="w-40 h-40 object-cover rounded-md mr-4"
-                          width={500}
-                          height={500}
-                        />
-                      ) : null}
-                      <div>
-                        {suggestion}
-                        <br />
-                        <a
-                          href={links[index]}
-                          className="text-xs text-indigo-600 hover:underline"
-                          target="_blank"
-                          rel="noopener noreferrer"
+          <div className="W-100">
+            <Link href="/wiki">
+              <div className="mb-10 mt-2 max-h-screen flex-grow overflow-y-auto overflow-x-hidden rounded-md scrollbar-thin scrollbar-thumb-indigo-600 hover:overflow-x-visible">
+                {suggestions.length > 0 && (
+                  <ul className="mr-4 mt-4 grid gap-4">
+                    {suggestions.map((suggestion, index) => (
+                      <motion.div
+                        whileHover={{ scale: 0.98 }}
+                        transition={{
+                          type: "spring",
+                          stiffness: 100,
+                          damping: 10,
+                        }}
+                        key={index}
+                      >
+                        <li
+                          className="shadow-indigo flex items-start rounded-md bg-white bg-opacity-30 p-4 text-sm   font-medium text-gray-600  shadow-lg hover:bg-white"
+                          onClick={() => handleItemClick(suggestion)}
                         >
-                          {links[index]}
-                        </a>
-                        <p className="text-sm text-gray-500 mt-1 hover:text-black">
-                          {extracts[index]}
-                        </p>
-                      </div>
-                    </li>
-                  </motion.div>
-                ))}
-              </ul>
-            )}
+                          {!(images[index] == "") ? (
+                            <Image
+                              src={images[index]}
+                              alt={suggestion}
+                              className="mr-4 h-40 w-40 rounded-md object-cover"
+                              width={500}
+                              height={500}
+                            />
+                          ) : null}
+                          <div>
+                            {suggestion}
+                            <br />
+                            <a
+                              href={links[index]}
+                              className="text-xs text-indigo-600 hover:underline"
+                              target="_blank"
+                              rel="noopener noreferrer"
+                            >
+                              {links[index]}
+                            </a>
+                            <p className="mt-1 text-sm text-gray-500 hover:text-black">
+                              {extracts[index]}
+                            </p>
+                          </div>
+                        </li>
+                      </motion.div>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            </Link>
           </div>
         </div>
       ) : (
         <div>
           <form>
-            <div className="relative group">
-              <div className="absolute inset-1 bg-gradient-to-r from-pink-600 to-indigo-600 rounded-lg blur-lg opacity-75 group-hover:opacity-100 transition duration-1000 group-hover:duration-200 animate-tilt"></div>
+            <div className="group relative">
+              <div className="absolute inset-1 animate-tilt rounded-lg bg-gradient-to-r from-pink-600 to-indigo-600 opacity-75 blur-lg transition duration-1000 group-hover:opacity-100 group-hover:duration-200"></div>
               <div className="relative flex justify-between overflow-hidden rounded-md bg-white shadow shadow-black/20">
                 <input
                   type="text"
-                  className="block w-full flex-1 py-3 px-4 focus:outline-none"
+                  className="block w-full flex-1 px-4 py-3 focus:outline-none"
                   placeholder="Search Wikipedia Articles ..."
                   value={searchQuery}
                   onChange={handleChange}
@@ -197,40 +208,47 @@ function Search() {
               </div>
             </div>
           </form>
-          <div className="mt-2 mb-10 w-100 max-h-80 overflow-y-auto">
-            {suggestions.length > 0 && (
-              <ul className="mt-4 w-full grid gap-4 h-full">
-                {suggestions.map((suggestion, index) => (
-                  <motion.div
-                    whileHover={{ scale: 1.02 }}
-                    transition={{ type: "spring", stiffness: 100, damping: 10 }}
-                    key={index}
-                  >
-                    <li
-                      className="flex items-start text-sm font-medium text-black rounded-md bg-white backdrop-filter backdrop-blur-lg p-4  hover:bg-white hover:backdrop-blur-lg shadow-lg shadow-indigo"
-                      onClick={() => handleItemClick(suggestion)}
+
+          <div className="w-100 mb-10 mt-2 max-h-80">
+            <Link href="/wiki">
+              {suggestions.length > 0 && (
+                <ul className="mt-4 grid h-full w-full gap-4">
+                  {suggestions.map((suggestion, index) => (
+                    <motion.div
+                      whileHover={{ scale: 1.02 }}
+                      transition={{
+                        type: "spring",
+                        stiffness: 100,
+                        damping: 10,
+                      }}
+                      key={index}
                     >
-                      {!(images[index] == "") ? (
-                        <Image
-                          src={images[index]}
-                          alt={suggestion}
-                          className="w-20 h-20 object-cover rounded-md mr-4"
-                          width={500}
-                          height={500}
-                        />
-                      ) : null}
-                      <div>
-                        {suggestion}
-                        <br />
-                        <p className="text-xs text-black mt-1 hover:text-black">
-                          {extracts[index]}
-                        </p>
-                      </div>
-                    </li>
-                  </motion.div>
-                ))}
-              </ul>
-            )}
+                      <li
+                        className="shadow-indigo flex items-start rounded-md bg-white p-4 text-sm font-medium text-black shadow-lg  backdrop-blur-lg backdrop-filter hover:bg-white hover:backdrop-blur-lg"
+                        onClick={() => handleItemClick(suggestion)}
+                      >
+                        {!(images[index] == "") ? (
+                          <Image
+                            src={images[index]}
+                            alt={suggestion}
+                            className="mr-4 h-20 w-20 rounded-md object-cover"
+                            width={500}
+                            height={500}
+                          />
+                        ) : null}
+                        <div>
+                          {suggestion}
+                          <br />
+                          <p className="mt-1 text-xs text-black hover:text-black">
+                            {extracts[index]}
+                          </p>
+                        </div>
+                      </li>
+                    </motion.div>
+                  ))}
+                </ul>
+              )}
+            </Link>
           </div>
         </div>
       )}

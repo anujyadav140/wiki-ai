@@ -1,13 +1,14 @@
-import React from "react";
+"use client";
+import { Divider } from "@mui/material";
+import { LoremIpsum } from "./lorem";
 
-function MainContent() {
+export default function MainContent() {
   return (
-    <div className="flex h-screen items-center justify-center">
-      <div className="w-2/3 rounded-lg bg-gray-200">
-        <h1>Napoleon Bonaparte</h1>
+    <>
+      <div className="divide-y divide-purple-700">
+        <div>Napoleon</div>
+        <LoremIpsum />
       </div>
-    </div>
+    </>
   );
 }
-
-export default MainContent;

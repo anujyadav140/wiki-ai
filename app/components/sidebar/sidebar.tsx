@@ -39,36 +39,48 @@ const Sidebar = () => {
     <div>
       {isMobileScreen ? (
         <div
-        className="absolute top-[7rem] flex justify-center items-center -left-5 w-10 h-10 bg-glass rounded-full cursor-pointer"
-        onClick={handleToggle}
-      >
-        <BiChevronLeft
-          className={`${
-            toggle ? "rotate-180" : ""
-          } text-3xl transition-all duration-300`}
-        />
-        <Drawer anchor="left" open={!toggle} onClose={handleToggle} PaperProps={{ style: { backgroundColor: "white", borderTopRightRadius: 10, borderBottomRightRadius: 10, } }}>
-          <List>
-            {dataWeb.map((item, index) => (
-              <div key={item.id}>
-                {index === dataWeb.length - 1 && <Divider />} {/* Add a divider before the last item */}
-                <ListItemButton component="a" href="#">
-                  <ListItem>
-                    <ListItemIcon>{item.icon}</ListItemIcon>
-                    <ListItemText primary={item.text} />
-                  </ListItem>
-                </ListItemButton>
-              </div>
-            ))}
-          </List>
-        </Drawer>
-      </div>
+          className="absolute -left-5 top-[7rem] flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-glass"
+          onClick={handleToggle}
+        >
+          <BiChevronLeft
+            className={`${
+              toggle ? "rotate-180" : ""
+            } text-3xl transition-all duration-300`}
+          />
+          <Drawer
+            anchor="left"
+            open={!toggle}
+            onClose={handleToggle}
+            PaperProps={{
+              style: {
+                backgroundColor: "white",
+                borderTopRightRadius: 10,
+                borderBottomRightRadius: 10,
+              },
+            }}
+          >
+            <List>
+              {dataWeb.map((item, index) => (
+                <div key={item.id}>
+                  {index === dataWeb.length - 1 && <Divider />}{" "}
+                  {/* Add a divider before the last item */}
+                  <ListItemButton component="a" href="#">
+                    <ListItem>
+                      <ListItemIcon>{item.icon}</ListItemIcon>
+                      <ListItemText primary={item.text} />
+                    </ListItem>
+                  </ListItemButton>
+                </div>
+              ))}
+            </List>
+          </Drawer>
+        </div>
       ) : (
         <div className={`${toggle ? "w-[5.8rem]" : ""} sidebar-container`}>
           <UserProfile toggle={toggle} />
           <SidebarData toggle={toggle} />
           <div
-            className="absolute top-[7rem] flex justify-center items-center -left-5 w-10 h-10 bg-glass rounded-full cursor-pointer"
+            className="absolute -left-5 top-[7rem] flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-glass"
             onClick={handleToggle}
           >
             <BiChevronLeft

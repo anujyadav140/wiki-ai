@@ -48,7 +48,7 @@ function Tab() {
       <div
         role="tablist"
         aria-label="tabs"
-        className="shadow-900/20 relative mx-auto grid h-12 w-max grid-cols-3 items-center overflow-hidden rounded-full bg-gray-900/20 px-[3px] shadow-2xl transition"
+        className="relative mx-auto grid h-12 w-max grid-cols-3 items-center overflow-hidden rounded-full bg-gradient-to-r from-indigo-300 via-purple-500 to-indigo-600 px-[3px] shadow-2xl transition drop-shadow-xl hover:drop-shadow-2xl"
       >
         <div
           className={`indicator absolute bottom-0 left-0 top-0 my-auto h-11 rounded-full bg-white shadow-md transition-transform ${
@@ -72,12 +72,12 @@ function Tab() {
             tabIndex={activeTab === 0 ? 0 : -1}
             onMouseEnter={() => changeTab(0)}
             className={`tab relative flex h-10 items-center rounded-full px-6 ${
-              activeTab === 0 ? "bg-white text-gray-800" : "text-gray-800"
+              activeTab === 0 ? "bg-white text-black" : "text-black"
             }`}
           >
             <AiOutlineFileText className="mr-1" />
             {!isMobileScreen && (
-              <span className="text-gray-800">Short Summary</span>
+              <span className="text-black">Short Summary</span>
             )}
           </button>
         </LightTooltip>
@@ -94,12 +94,12 @@ function Tab() {
             tabIndex={activeTab === 1 ? 0 : -1}
             onMouseEnter={() => changeTab(1)}
             className={`tab relative flex h-10 items-center rounded-full px-6 ${
-              activeTab === 1 ? "bg-white text-gray-800" : "text-gray-800"
+              activeTab === 1 ? "bg-white text-black" : "text-black"
             }`}
           >
             <HiOutlineListBullet className="mr-1" />
             {!isMobileScreen && (
-              <span className="text-gray-800">Bullet Points</span>
+              <span className="text-black">Bullet Points</span>
             )}
           </button>
         </LightTooltip>
@@ -116,17 +116,17 @@ function Tab() {
             tabIndex={activeTab === 2 ? 0 : -1}
             onMouseEnter={() => changeTab(2)}
             className={`tab relative flex h-10 items-center rounded-full px-6 ${
-              activeTab === 2 ? "bg-white text-gray-800" : "text-gray-800"
+              activeTab === 2 ? "bg-white text-black" : "text-black"
             }`}
           >
             <VscSymbolKeyword className="mr-1" />
             {!isMobileScreen && (
-              <span className="text-gray-800">Keyword Search</span>
+              <span className="text-black">Keyword Search</span>
             )}
           </button>
         </LightTooltip>
       </div>
-      <div className="relative mt-6 rounded-3xl bg-purple-50"></div>
+      {/* <div className="relative mt-6 rounded-3xl bg-purple-50"></div> */}
     </div>
   );
 }
