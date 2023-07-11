@@ -9,7 +9,7 @@ function Search() {
   const [links, setLinks] = useState<string[]>([]);
   const [extracts, setExtracts] = useState<string[]>([]);
   const [images, setImages] = useState<string[]>([]);
-  const [isMobileScreen, setisMobileScreen] = useState(false);
+  const [isMobileScreen, setIsMobileScreen] = useState(false);
 
   const handleChange = async (event: ChangeEvent<HTMLInputElement>) => {
     const query = event.target.value;
@@ -79,14 +79,12 @@ function Search() {
 
   useEffect(() => {
     if (window.innerWidth < 740) {
-      setisMobileScreen(true);
+      setIsMobileScreen(true);
     }
-  });
+  }, []);
 
   return (
-    <div
-      className={!isMobileScreen ? "mt-40 ml-40 mr-40" : "mt-10 ml-10 mr-10"}
-    >
+    <div className={!isMobileScreen ? "mt-32 ml-40 mr-40" : "mt-10 ml-10 mr-10"}>
       {!isMobileScreen ? (
         <div className="relative w-300">
           <form>
@@ -121,9 +119,9 @@ function Search() {
               </div>
             </div>
           </form>
-          <div className=" mt-2 mb-10 w-full">
+          <div className=" mt-2 mb-10 w-full max-h-80 overflow-y-auto overflow-x-hidden">
             {suggestions.length > 0 && (
-              <ul className="mt-4 w-full grid gap-4">
+              <ul className="mt-4 w-full grid gap-4 h-full">
                 {suggestions.map((suggestion, index) => (
                   <motion.div
                     whileHover={{ scale: 1.02 }}
@@ -199,9 +197,9 @@ function Search() {
               </div>
             </div>
           </form>
-          <div className="mt-2 mb-10 w-100">
+          <div className="mt-2 mb-10 w-100 max-h-80 overflow-y-auto">
             {suggestions.length > 0 && (
-              <ul className="mt-4 w-full grid gap-4">
+              <ul className="mt-4 w-full grid gap-4 h-full">
                 {suggestions.map((suggestion, index) => (
                   <motion.div
                     whileHover={{ scale: 1.02 }}
@@ -212,7 +210,7 @@ function Search() {
                       className="flex items-start text-sm font-medium text-black rounded-md bg-white backdrop-filter backdrop-blur-lg p-4  hover:bg-white hover:backdrop-blur-lg shadow-lg shadow-indigo"
                       onClick={() => handleItemClick(suggestion)}
                     >
-                    {!(images[index] == "") ? (
+                      {!(images[index] == "") ? (
                         <Image
                           src={images[index]}
                           alt={suggestion}

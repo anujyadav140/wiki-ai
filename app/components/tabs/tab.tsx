@@ -48,15 +48,15 @@ function Tab() {
       <div
         role="tablist"
         aria-label="tabs"
-        className="relative w-max mx-auto h-12 grid grid-cols-3 items-center px-[3px] rounded-full bg-gray-900/20 overflow-hidden shadow-2xl shadow-900/20 transition"
+        className="shadow-900/20 relative mx-auto grid h-12 w-max grid-cols-3 items-center overflow-hidden rounded-full bg-gray-900/20 px-[3px] shadow-2xl transition"
       >
         <div
-          className={`absolute indicator h-11 my-auto top-0 bottom-0 left-0 rounded-full bg-white shadow-md transition-transform ${
+          className={`indicator absolute bottom-0 left-0 top-0 my-auto h-11 rounded-full bg-white shadow-md transition-transform ${
             activeTab === 0
-              ? "transform translate-x-0"
+              ? "translate-x-0 transform"
               : activeTab === 1
-              ? "transform translate-x-full"
-              : "transform translate-x-full translate-x-full"
+              ? "translate-x-full transform"
+              : "translate-x-full translate-x-full transform"
           }`}
         ></div>
         <LightTooltip
@@ -71,7 +71,7 @@ function Tab() {
             id="tab-1"
             tabIndex={activeTab === 0 ? 0 : -1}
             onMouseEnter={() => changeTab(0)}
-            className={`relative flex items-center h-10 px-6 tab rounded-full ${
+            className={`tab relative flex h-10 items-center rounded-full px-6 ${
               activeTab === 0 ? "bg-white text-gray-800" : "text-gray-800"
             }`}
           >
@@ -93,7 +93,7 @@ function Tab() {
             id="tab-2"
             tabIndex={activeTab === 1 ? 0 : -1}
             onMouseEnter={() => changeTab(1)}
-            className={`relative flex items-center h-10 px-6 tab rounded-full ${
+            className={`tab relative flex h-10 items-center rounded-full px-6 ${
               activeTab === 1 ? "bg-white text-gray-800" : "text-gray-800"
             }`}
           >
@@ -115,7 +115,7 @@ function Tab() {
             id="tab-3"
             tabIndex={activeTab === 2 ? 0 : -1}
             onMouseEnter={() => changeTab(2)}
-            className={`relative flex items-center h-10 px-6 tab rounded-full ${
+            className={`tab relative flex h-10 items-center rounded-full px-6 ${
               activeTab === 2 ? "bg-white text-gray-800" : "text-gray-800"
             }`}
           >
@@ -126,7 +126,7 @@ function Tab() {
           </button>
         </LightTooltip>
       </div>
-      <div className="mt-6 relative rounded-3xl bg-purple-50"></div>
+      <div className="relative mt-6 rounded-3xl bg-purple-50"></div>
     </div>
   );
 }

@@ -21,6 +21,7 @@
     "framer-motion": "^10.12.18",
     "next": "13.4.9",
     "postcss": "8.4.25",
+    "prettier-plugin-tailwindcss": "^0.3.0",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-icons": "^4.10.1",
