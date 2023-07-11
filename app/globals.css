@@ -18,7 +18,7 @@
 }
 
 body {
-  min-height: 100vh;
+  min-height: 300vh;
   background-image: linear-gradient(to bottom right, var(--tw-gradient-stops));
   --tw-gradient-from: #e9d5ff var(--tw-gradient-from-position);
   --tw-gradient-to: rgb(233 213 255 / 0) var(--tw-gradient-to-position);
