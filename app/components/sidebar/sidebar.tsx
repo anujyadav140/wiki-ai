@@ -1,5 +1,5 @@
 import React, { useState, ChangeEvent, useEffect } from "react";
-import { BiChevronLeft } from "react-icons/bi";
+import { BiChevronLeft, BiChevronRight } from "react-icons/bi";
 import UserProfile from "./sidebar-profile";
 import SidebarData from "./sidebar-data";
 import Drawer from "@mui/material/Drawer";
@@ -10,7 +10,7 @@ import { dataWeb } from "./data";
 import ListItemIcon from "@mui/material/ListItemIcon/ListItemIcon";
 import { Divider, ListItemButton } from "@mui/material";
 
-const Sidebar = () => {
+const Sidebar = (props: any) => {
   const [toggle, setToggle] = useState(true);
   const [isMobileScreen, setIsMobileScreen] = useState(false);
 
@@ -35,6 +35,16 @@ const Sidebar = () => {
     setToggle(!toggle);
   };
 
+  const renderIcon = () => {
+    if (props.right) {
+      return <BiChevronRight className={`${toggle ? "rotate-180" : ""} text-3xl transition-all duration-300`} />;
+    } else if (props.left) {
+      return <BiChevronLeft className={`${toggle ? "rotate-180" : ""} text-3xl transition-all duration-300`} />;
+    } else {
+      return null;
+    }
+  };
+
   return (
     <div>
       {isMobileScreen ? (
@@ -42,11 +52,7 @@ const Sidebar = () => {
           className="absolute -left-5 top-[7rem] flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-glass"
           onClick={handleToggle}
         >
-          <BiChevronLeft
-            className={`${
-              toggle ? "rotate-180" : ""
-            } text-3xl transition-all duration-300`}
-          />
+          {renderIcon()}
           <Drawer
             anchor="left"
             open={!toggle}
@@ -62,7 +68,7 @@ const Sidebar = () => {
             <List>
               {dataWeb.map((item, index) => (
                 <div key={item.id}>
-                  {index === dataWeb.length - 1 && <Divider />}{" "}
+                  {index === dataWeb.length - 1 && <Divider />}
                   {/* Add a divider before the last item */}
                   <ListItemButton component="a" href="#">
                     <ListItem>
@@ -83,11 +89,7 @@ const Sidebar = () => {
             className="absolute -left-5 top-[7rem] flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-glass"
             onClick={handleToggle}
           >
-            <BiChevronLeft
-              className={`${
-                toggle ? "rotate-180" : ""
-              } text-3xl transition-all duration-300`}
-            />
+            {renderIcon()}
           </div>
         </div>
       )}

@@ -123,11 +123,20 @@ function Search() {
             </div>
           </form>
           <div className="W-100">
-            <Link href="/wiki">
-              <div className="mb-10 mt-2 max-h-screen flex-grow overflow-y-auto overflow-x-hidden rounded-md scrollbar-thin scrollbar-thumb-indigo-600 hover:overflow-x-visible">
-                {suggestions.length > 0 && (
-                  <ul className="mr-4 mt-4 grid gap-4">
-                    {suggestions.map((suggestion, index) => (
+            <div className="mb-10 mt-2 max-h-screen flex-grow overflow-y-auto overflow-x-hidden rounded-md scrollbar-thin scrollbar-thumb-indigo-600 hover:overflow-x-visible">
+              {suggestions.length > 0 && (
+                <ul className="mr-4 mt-4 grid gap-4">
+                  {suggestions.map((suggestion, index) => (
+                    // <Link href={`/wiki/${suggestion}`}>
+                    <Link
+                      href={{
+                        pathname: `/wiki/${suggestion}`,
+                        query: {
+                          wikiName: `${suggestion}`,
+                          linkUrl: `${links[index]}`,
+                        },
+                      }}
+                    >
                       <motion.div
                         whileHover={{ scale: 0.98 }}
                         transition={{
@@ -167,11 +176,11 @@ function Search() {
                           </div>
                         </li>
                       </motion.div>
-                    ))}
-                  </ul>
-                )}
-              </div>
-            </Link>
+                    </Link>
+                  ))}
+                </ul>
+              )}
+            </div>
           </div>
         </div>
       ) : (
@@ -210,50 +219,51 @@ function Search() {
           </form>
 
           <div className="w-100 mb-10 mt-2 max-h-80">
-            <Link href="/wiki">
+            <div className="mb-10 mt-2 max-h-screen flex-grow overflow-y-auto overflow-x-hidden rounded-md scrollbar-thin scrollbar-thumb-indigo-600 hover:overflow-x-visible">
               {suggestions.length > 0 && (
                 <ul className="mt-4 grid h-full w-full gap-4">
                   {suggestions.map((suggestion, index) => (
-                    <motion.div
-                      whileHover={{ scale: 1.02 }}
-                      transition={{
-                        type: "spring",
-                        stiffness: 100,
-                        damping: 10,
-                      }}
-                      key={index}
-                    >
-                      <li
-                        className="shadow-indigo flex items-start rounded-md bg-white p-4 text-sm font-medium text-black shadow-lg  backdrop-blur-lg backdrop-filter hover:bg-white hover:backdrop-blur-lg"
-                        onClick={() => handleItemClick(suggestion)}
+                    <Link href={`/wiki/${suggestion}`}>
+                      <motion.div
+                        whileHover={{ scale: 1.02 }}
+                        transition={{
+                          type: "spring",
+                          stiffness: 100,
+                          damping: 10,
+                        }}
+                        key={index}
                       >
-                        {!(images[index] == "") ? (
-                          <Image
-                            src={images[index]}
-                            alt={suggestion}
-                            className="mr-4 h-20 w-20 rounded-md object-cover"
-                            width={500}
-                            height={500}
-                          />
-                        ) : null}
-                        <div>
-                          {suggestion}
-                          <br />
-                          <p className="mt-1 text-xs text-black hover:text-black">
-                            {extracts[index]}
-                          </p>
-                        </div>
-                      </li>
-                    </motion.div>
+                        <li
+                          className="shadow-indigo flex items-start rounded-md bg-white p-4 text-sm font-medium text-black shadow-lg  backdrop-blur-lg backdrop-filter hover:bg-white hover:backdrop-blur-lg"
+                          onClick={() => handleItemClick(suggestion)}
+                        >
+                          {!(images[index] == "") ? (
+                            <Image
+                              src={images[index]}
+                              alt={suggestion}
+                              className="mr-4 h-20 w-20 rounded-md object-cover"
+                              width={500}
+                              height={500}
+                            />
+                          ) : null}
+                          <div>
+                            {suggestion}
+                            <br />
+                            <p className="mt-1 text-xs text-black hover:text-black">
+                              {extracts[index]}
+                            </p>
+                          </div>
+                        </li>
+                      </motion.div>
+                    </Link>
                   ))}
                 </ul>
               )}
-            </Link>
+            </div>
           </div>
         </div>
       )}
     </div>
   );
 }
-
 export default Search;
