@@ -136,6 +136,7 @@ function Search() {
                           linkUrl: `${links[index]}`,
                         },
                       }}
+                      key={index}
                     >
                       <motion.div
                         whileHover={{ scale: 0.98 }}
@@ -223,7 +224,7 @@ function Search() {
               {suggestions.length > 0 && (
                 <ul className="mt-4 grid h-full w-full gap-4">
                   {suggestions.map((suggestion, index) => (
-                    <Link href={`/wiki/${suggestion}`}>
+                    <Link href={`/wiki/${suggestion}`} key={index}>
                       <motion.div
                         whileHover={{ scale: 1.02 }}
                         transition={{
