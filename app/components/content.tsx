@@ -6,7 +6,8 @@ import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 
 interface Section {
   heading: string;
-  subSections: string[];
+  subSections: { heading: string; selected: boolean }[];
+  selected: boolean; // Add the selected property to the Section interface
 }
 
 const getContentIntro = async (
@@ -34,7 +35,7 @@ const getContentIntro = async (
         const introduction = pageData.extract;
 
         setIntroExtracts([
-          { heading: "Introduction", subSections: [introduction] },
+          { heading: "Introduction", subSections: [{ heading: introduction, selected: false }], selected: false },
         ]);
       }
     }
@@ -88,10 +89,11 @@ const getContentHeadings = async (
             currentSection = {
               heading,
               subSections: [],
+              selected: false,
             };
           } else {
             if (currentSection !== null) {
-              currentSection.subSections.push(heading);
+              currentSection.subSections.push({ heading, selected: false });
             }
           }
         }
@@ -122,16 +124,17 @@ const shouldExcludeSection = (spanId: string) => {
 
 export default function MainContent(props: any) {
   const [introExtracts, setIntroExtracts] = useState<Section[]>([]);
-  const [headingExtracts, setheadingExtracts] = useState<Section[]>([]);
+  const [headingExtracts, setHeadingExtracts] = useState<Section[]>([]);
   const [isOpenIntro, setIsOpenIntro] = useState(false);
   const [openHeadingIndexes, setOpenHeadingIndexes] = useState<number[]>([]);
+  const [selectedHeadings, setSelectedHeadings] = useState<string[]>([]);
 
   useEffect(() => {
     getContentIntro(props.link, props.name, setIntroExtracts);
   }, [props.link, props.name]);
 
   useEffect(() => {
-    getContentHeadings(props.link, props.name, setheadingExtracts);
+    getContentHeadings(props.link, props.name, setHeadingExtracts);
   }, [props.link, props.name]);
 
   const handleIntroClick = () => {
@@ -148,9 +151,86 @@ export default function MainContent(props: any) {
     });
   };
 
+  const handleMainSectionClick = (index: number) => {
+    setHeadingExtracts((prevExtracts) => {
+      const updatedExtracts = [...prevExtracts];
+      const section = updatedExtracts[index];
+  
+      // Deselect all other sections
+      updatedExtracts.forEach((item, i) => {
+        if (i !== index) {
+          item.selected = false;
+          item.subSections.forEach((subSection) => {
+            subSection.selected = false;
+          });
+        }
+      });
+  
+      if (section && section.subSections.length > 0) {
+        const selected = !section.subSections.every((subSection) => subSection.selected);
+        section.subSections = section.subSections.map((subSection) => ({
+          heading: subSection.heading,
+          selected,
+        }));
+        section.selected = selected; // Update the selected state of the main section
+      } else if (section) {
+        section.selected = !section.selected;
+      }
+      const selectedHeadings = updatedExtracts
+        .flatMap((section) => {
+          if (section.selected) {
+            return [section.heading, ...section.subSections.map((sub) => sub.heading)];
+          } else {
+            return [];
+          }
+        });
+      setSelectedHeadings(selectedHeadings);
+      return updatedExtracts;
+    });
+  };
+  
+  const handleSubSectionClick = (mainIndex: number, subIndex: number) => {
+    setHeadingExtracts((prevExtracts) => {
+      const updatedExtracts = [...prevExtracts];
+      const section = updatedExtracts[mainIndex];
+      if (section) {
+        const subSection = section.subSections[subIndex];
+        if (subSection) {
+          subSection.selected = !subSection.selected;
+  
+          const selectedHeadings = updatedExtracts
+            .flatMap((section) => {
+              if (section.subSections.some((sub) => sub.selected)) {
+                section.selected = true;
+                return [section.heading, ...section.subSections.filter((sub) => sub.selected).map((sub) => sub.heading)];
+              } else if (section.subSections.every((sub) => !sub.selected)) {
+                section.selected = false;
+                return [];
+              } else {
+                section.selected = false;
+                return section.subSections.filter((sub) => sub.selected).map((sub) => sub.heading);
+              }
+            });
+  
+          setSelectedHeadings(selectedHeadings);
+        }
+      }
+      return updatedExtracts;
+    });
+  };
+  
+  
+  useEffect(() => {
+    console.log(selectedHeadings);
+  }, [selectedHeadings]);
+  
+
   return (
     <>
-      <div>
+      <div className="scrollbar-track shadow-indigo max-h-screen 
+        w-2/3 overflow-y-auto overflow-x-hidden rounded-xl bg-white bg-opacity-30   p-4 text-sm  font-medium
+          text-gray-600 shadow-xl
+       scrollbar-thin scrollbar-thumb-indigo-600">
         <h1>{props.name}</h1>
         <Divider />
         <h1>{props.link}</h1>
@@ -180,13 +260,13 @@ export default function MainContent(props: any) {
             </div>
             {isOpenIntro &&
               section.subSections.map(
-                (subSection: string, subIndex: number) => (
-                  <p
-                    className="my-6 rounded-md bg-gray-300 px-8 py-5"
+                (subSection: { heading: string; selected: boolean }, subIndex: number) => (
+                  <motion.p
                     key={subIndex}
+                    className="my-6 rounded-md bg-gray-300 px-8 py-5"
                   >
-                    {subSection.replace(/<[^>]+>/g, "")}
-                  </p>
+                    {subSection.heading.replace(/<[^>]+>/g, "")}
+                  </motion.p>
                 )
               )}
           </motion.div>
@@ -202,6 +282,16 @@ export default function MainContent(props: any) {
           >
             <div className="flex items-center justify-between">
               <motion.h2 layout>
+                <input
+                  type="checkbox"
+                  className="mr-2"
+                  checked={
+                    section.subSections.length > 0
+                      ? section.subSections.every((subSection) => subSection.selected)
+                      : section.selected
+                  }
+                  onChange={() => handleMainSectionClick(index)}
+                />
                 {section.heading.replace(/<[^>]+>/g, "")}
               </motion.h2>
               {section.subSections.length > 0 && (
@@ -222,13 +312,19 @@ export default function MainContent(props: any) {
             </div>
             {openHeadingIndexes.includes(index) &&
               section.subSections.map(
-                (subSection: string, subIndex: number) => (
-                  <p
-                    className="my-6 rounded-md bg-gray-300 px-8 py-5"
+                (subSection: { heading: string; selected: boolean }, subIndex: number) => (
+                  <motion.p
                     key={subIndex}
+                    className="my-6 rounded-md bg-gray-300 px-8 py-5"
                   >
-                    {subSection.replace(/<[^>]+>/g, "")}
-                  </p>
+                    <input
+                      type="checkbox"
+                      className="mr-2"
+                      checked={subSection.selected}
+                      onChange={() => handleSubSectionClick(index, subIndex)}
+                    />
+                    {subSection.heading.replace(/<[^>]+>/g, "")}
+                  </motion.p>
                 )
               )}
           </motion.div>
