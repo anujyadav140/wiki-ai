@@ -28,7 +28,10 @@ body {
 
 @layer base {
   .sidebar-container {
-    @apply relative ml-6 h-[96%] w-[20rem] rounded-3xl border border-solid border-glass bg-glass p-4 transition-all duration-500;
+    @apply relative mt-3 ml-6 h-[96%] w-[20rem] rounded-3xl border border-solid border-glass bg-glass p-4 transition-all duration-500;
+  }
+  .taskbar-container {
+    @apply relative mt-3 mr-6 h-[35%] w-[20rem] rounded-3xl border border-solid border-glass bg-glass p-4 transition-all duration-500;
   }
   .sidebar {
     @apply mt-2 flex cursor-pointer items-center rounded-lg p-4 transition-all duration-300 hover:bg-white;

@@ -135,7 +135,7 @@ const Sidebar = (props: any) => {
           </Drawer>
         </div>
       ) : (
-        <div className={`${toggle ? "w-[5.8rem]" : ""} sidebar-container`}>
+        <div className={`${toggle ? "w-[5.8rem]" : ""} taskbar-container`}>
           {/* <UserProfile toggle={toggle} /> */}
           <TaskbarData toggle={toggle} />
           <div
