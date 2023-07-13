@@ -3,6 +3,8 @@ import { LoremIpsum } from "./lorem";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
+import Sidebar from "./sidebar/sidebar";
+import toast, { Toaster } from 'react-hot-toast';
 
 interface Section {
   heading: string;
@@ -218,7 +220,12 @@ export default function MainContent(props: any) {
       return updatedExtracts;
     });
   };
-  
+
+  const notify = () => {
+    if(selectedHeadings.length === 0) {
+      toast('Bitch select something up!');
+    }
+  }
   
   useEffect(() => {
     console.log(selectedHeadings);
@@ -227,7 +234,9 @@ export default function MainContent(props: any) {
 
   return (
     <>
-      <div className="scrollbar-track shadow-indigo max-h-screen 
+      <div className="
+      ml-auto mr-auto
+      scrollbar-track shadow-indigo max-h-screen 
         w-2/3 overflow-y-auto overflow-x-hidden rounded-xl bg-white bg-opacity-30   p-4 text-sm  font-medium
           text-gray-600 shadow-xl
        scrollbar-thin scrollbar-thumb-indigo-600">
@@ -331,6 +340,12 @@ export default function MainContent(props: any) {
         ))}
         {/* <LoremIpsum /> */}
       </div>
+      <div className="top-0 right-0 h-screen">
+        <button onClick={notify}>
+        <Sidebar taskBar="isTaskBar" right="isRight" />
+        </button>
+        <Toaster />
+    </div>
     </>
   );
 }
