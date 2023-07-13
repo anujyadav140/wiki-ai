@@ -223,7 +223,7 @@ export default function MainContent(props: any) {
 
   const notify = () => {
     if(selectedHeadings.length === 0) {
-      toast('Bitch select something up!');
+      toast('You have to select one section for the AI generation to work');
     }
   }
   
@@ -338,7 +338,6 @@ export default function MainContent(props: any) {
               )}
           </motion.div>
         ))}
-        {/* <LoremIpsum /> */}
       </div>
       <div className="top-0 right-0 h-screen">
         <button onClick={notify}>
