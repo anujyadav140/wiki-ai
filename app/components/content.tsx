@@ -1,10 +1,9 @@
 import { Divider } from "@mui/material";
-import { LoremIpsum } from "./lorem";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 import Sidebar from "./sidebar/sidebar";
-import toast, { Toaster } from 'react-hot-toast';
+import toast, { Toaster } from "react-hot-toast";
 
 interface Section {
   heading: string;
@@ -37,7 +36,11 @@ const getContentIntro = async (
         const introduction = pageData.extract;
 
         setIntroExtracts([
-          { heading: "Introduction", subSections: [{ heading: introduction, selected: false }], selected: false },
+          {
+            heading: "Introduction",
+            subSections: [{ heading: introduction, selected: false }],
+            selected: false,
+          },
         ]);
       }
     }
@@ -157,7 +160,7 @@ export default function MainContent(props: any) {
     setHeadingExtracts((prevExtracts) => {
       const updatedExtracts = [...prevExtracts];
       const section = updatedExtracts[index];
-  
+
       // Deselect all other sections
       updatedExtracts.forEach((item, i) => {
         if (i !== index) {
@@ -167,9 +170,11 @@ export default function MainContent(props: any) {
           });
         }
       });
-  
+
       if (section && section.subSections.length > 0) {
-        const selected = !section.subSections.every((subSection) => subSection.selected);
+        const selected = !section.subSections.every(
+          (subSection) => subSection.selected
+        );
         section.subSections = section.subSections.map((subSection) => ({
           heading: subSection.heading,
           selected,
@@ -178,19 +183,21 @@ export default function MainContent(props: any) {
       } else if (section) {
         section.selected = !section.selected;
       }
-      const selectedHeadings = updatedExtracts
-        .flatMap((section) => {
-          if (section.selected) {
-            return [section.heading, ...section.subSections.map((sub) => sub.heading)];
-          } else {
-            return [];
-          }
-        });
+      const selectedHeadings = updatedExtracts.flatMap((section) => {
+        if (section.selected) {
+          return [
+            section.heading,
+            ...section.subSections.map((sub) => sub.heading),
+          ];
+        } else {
+          return [];
+        }
+      });
       setSelectedHeadings(selectedHeadings);
       return updatedExtracts;
     });
   };
-  
+
   const handleSubSectionClick = (mainIndex: number, subIndex: number) => {
     setHeadingExtracts((prevExtracts) => {
       const updatedExtracts = [...prevExtracts];
@@ -199,21 +206,27 @@ export default function MainContent(props: any) {
         const subSection = section.subSections[subIndex];
         if (subSection) {
           subSection.selected = !subSection.selected;
-  
-          const selectedHeadings = updatedExtracts
-            .flatMap((section) => {
-              if (section.subSections.some((sub) => sub.selected)) {
-                section.selected = true;
-                return [section.heading, ...section.subSections.filter((sub) => sub.selected).map((sub) => sub.heading)];
-              } else if (section.subSections.every((sub) => !sub.selected)) {
-                section.selected = false;
-                return [];
-              } else {
-                section.selected = false;
-                return section.subSections.filter((sub) => sub.selected).map((sub) => sub.heading);
-              }
-            });
-  
+
+          const selectedHeadings = updatedExtracts.flatMap((section) => {
+            if (section.subSections.some((sub) => sub.selected)) {
+              section.selected = true;
+              return [
+                section.heading,
+                ...section.subSections
+                  .filter((sub) => sub.selected)
+                  .map((sub) => sub.heading),
+              ];
+            } else if (section.subSections.every((sub) => !sub.selected)) {
+              section.selected = false;
+              return [];
+            } else {
+              section.selected = false;
+              return section.subSections
+                .filter((sub) => sub.selected)
+                .map((sub) => sub.heading);
+            }
+          });
+
           setSelectedHeadings(selectedHeadings);
         }
       }
@@ -222,24 +235,25 @@ export default function MainContent(props: any) {
   };
 
   const notify = () => {
-    if(selectedHeadings.length === 0) {
-      toast('You have to select one section for the AI generation to work');
+    if (selectedHeadings.length === 0) {
+      toast("You have to select one section for the AI generation to work");
     }
-  }
-  
+  };
+
   useEffect(() => {
     console.log(selectedHeadings);
   }, [selectedHeadings]);
-  
 
   return (
     <>
-      <div className="
-      ml-auto mr-auto
-      scrollbar-track shadow-indigo max-h-screen 
+      <div
+        className="
+      scrollbar-track shadow-indigo
+      ml-auto mr-auto max-h-screen 
         w-2/3 overflow-y-auto overflow-x-hidden rounded-xl bg-white bg-opacity-30   p-4 text-sm  font-medium
           text-gray-600 shadow-xl
-       scrollbar-thin scrollbar-thumb-indigo-600">
+       scrollbar-thin scrollbar-thumb-indigo-600"
+      >
         <h1>{props.name}</h1>
         <Divider />
         <h1>{props.link}</h1>
@@ -269,7 +283,10 @@ export default function MainContent(props: any) {
             </div>
             {isOpenIntro &&
               section.subSections.map(
-                (subSection: { heading: string; selected: boolean }, subIndex: number) => (
+                (
+                  subSection: { heading: string; selected: boolean },
+                  subIndex: number
+                ) => (
                   <motion.p
                     key={subIndex}
                     className="my-6 rounded-md bg-gray-300 px-8 py-5"
@@ -296,7 +313,9 @@ export default function MainContent(props: any) {
                   className="mr-2"
                   checked={
                     section.subSections.length > 0
-                      ? section.subSections.every((subSection) => subSection.selected)
+                      ? section.subSections.every(
+                          (subSection) => subSection.selected
+                        )
                       : section.selected
                   }
                   onChange={() => handleMainSectionClick(index)}
@@ -321,7 +340,10 @@ export default function MainContent(props: any) {
             </div>
             {openHeadingIndexes.includes(index) &&
               section.subSections.map(
-                (subSection: { heading: string; selected: boolean }, subIndex: number) => (
+                (
+                  subSection: { heading: string; selected: boolean },
+                  subIndex: number
+                ) => (
                   <motion.p
                     key={subIndex}
                     className="my-6 rounded-md bg-gray-300 px-8 py-5"
@@ -339,12 +361,12 @@ export default function MainContent(props: any) {
           </motion.div>
         ))}
       </div>
-      <div className="top-0 right-0 h-screen">
+      <div className="right-0 top-0 h-screen">
         <button onClick={notify}>
-        <Sidebar taskBar="isTaskBar" right="isRight" />
+          <Sidebar taskBar="isTaskBar" right="isRight" />
         </button>
         <Toaster />
-    </div>
+      </div>
     </>
   );
 }
