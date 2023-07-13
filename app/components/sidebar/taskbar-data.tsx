@@ -1,15 +1,15 @@
 import React from "react";
-import { dataNavBar } from "./data";
+import { dataTaskBar } from "./data";
 
-const SidebarData = ({toggle}:{toggle:any}) => {
+const TaskbarData = ({toggle}:{toggle:any}) => {
   return (
     <div className="">
-      {dataNavBar.map((data) => {
+      {dataTaskBar.map((data) => {
         return (
           <div
             className={`${
               toggle ? "last:w-[3.6rem]" : "last:w-[17rem]"
-            } sidebar last:absolute left-4 bottom-4`}
+            } sidebar`}
             key={data.id}
           >
             <div className="mr-8 text-[1.7rem] text-brown">{data.icon}</div>
@@ -27,4 +27,4 @@ const SidebarData = ({toggle}:{toggle:any}) => {
   );
 };
 
-export default SidebarData;
+export default TaskbarData;

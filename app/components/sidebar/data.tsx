@@ -1,9 +1,11 @@
 import { FiUser, FiLogOut } from "react-icons/fi";
-import { AiOutlineFileSearch, AiOutlineMessage } from "react-icons/ai";
+import { AiOutlineFileSearch, AiOutlineFileText, AiOutlineMessage } from "react-icons/ai";
 import { BsFolder, BsWallet2, BsBookmarks } from "react-icons/bs";
 import { BiAlignLeft, BiImages } from "react-icons/bi";
+import { HiOutlineListBullet } from "react-icons/hi2";
+import { VscSymbolKeyword } from "react-icons/vsc";
 
-export const dataWeb = [
+export const dataNavBar = [
   {
     id: 1,
     icon: <AiOutlineFileSearch />,
@@ -29,19 +31,27 @@ export const dataWeb = [
     icon: <AiOutlineMessage />,
     text: "Messages",
   },
-  // {
-  //   id: 6,
-  //   icon: <BsFolder />,
-  //   text: "File Manager",
-  // },
-  // {
-  //   id: 7,
-  //   icon: <BsWallet2 />,
-  //   text: "Wallet",
-  // },
   {
     id: 6,
     icon: <FiLogOut />,
     text: "Logout",
   },
 ];
+
+export const dataTaskBar = [
+  {
+    id: 1,
+    icon: <AiOutlineFileText />,
+    text: "Short Summary",
+  },
+  {
+    id: 2,
+    icon: <HiOutlineListBullet />,
+    text: "Bullet Points",
+  },
+  {
+    id: 3,
+    icon: <VscSymbolKeyword />,
+    text: "Keyword Search",
+  },
+]

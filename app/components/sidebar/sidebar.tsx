@@ -2,11 +2,12 @@ import React, { useState, ChangeEvent, useEffect } from "react";
 import { BiChevronLeft, BiChevronRight } from "react-icons/bi";
 import UserProfile from "./sidebar-profile";
 import SidebarData from "./sidebar-data";
+import TaskbarData from "./taskbar-data";
 import Drawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
 import ListItemText from "@mui/material/ListItemText";
-import { dataWeb } from "./data";
+import { dataNavBar } from "./data";
 import ListItemIcon from "@mui/material/ListItemIcon/ListItemIcon";
 import { Divider, ListItemButton } from "@mui/material";
 
@@ -46,6 +47,8 @@ const Sidebar = (props: any) => {
   };
 
   return (
+    <>
+    {props.navBar ? (
     <div>
       {isMobileScreen ? (
         <div
@@ -66,9 +69,9 @@ const Sidebar = (props: any) => {
             }}
           >
             <List>
-              {dataWeb.map((item, index) => (
+              {dataNavBar.map((item, index) => (
                 <div key={item.id}>
-                  {index === dataWeb.length - 1 && <Divider />}
+                  {index === dataNavBar.length - 1 && <Divider />}
                   {/* Add a divider before the last item */}
                   <ListItemButton component="a" href="#">
                     <ListItem>
@@ -94,6 +97,58 @@ const Sidebar = (props: any) => {
         </div>
       )}
     </div>
+    //this is the taskbar
+    ) : (
+      <div>
+      {isMobileScreen ? (
+        <div
+          className="absolute -left-5 top-[7rem] flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-glass"
+          onClick={handleToggle}
+        >
+          {renderIcon()}
+          <Drawer
+            anchor="right"
+            open={!toggle}
+            onClose={handleToggle}
+            PaperProps={{
+              style: {
+                backgroundColor: "white",
+                borderTopRightRadius: 10,
+                borderBottomRightRadius: 10,
+              },
+            }}
+          >
+            <List>
+              {dataNavBar.map((item, index) => (
+                <div key={item.id}>
+                  {index === dataNavBar.length - 1 && <Divider />}
+                  {/* Add a divider before the last item */}
+                  <ListItemButton component="a" href="#">
+                    <ListItem>
+                      <ListItemIcon>{item.icon}</ListItemIcon>
+                      <ListItemText primary={item.text} />
+                    </ListItem>
+                  </ListItemButton>
+                </div>
+              ))}
+            </List>
+          </Drawer>
+        </div>
+      ) : (
+        <div className={`${toggle ? "w-[5.8rem]" : ""} sidebar-container`}>
+          {/* <UserProfile toggle={toggle} /> */}
+          <TaskbarData toggle={toggle} />
+          <div
+            className="absolute -left-5 top-[7rem] flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-glass"
+            onClick={handleToggle}
+          >
+            {renderIcon()}
+          </div>
+        </div>
+      )}
+    </div>
+    )}
+    </>
   );
 };
 
