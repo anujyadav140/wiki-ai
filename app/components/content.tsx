@@ -9,7 +9,7 @@ import parse from "html-react-parser";
 interface Section {
   heading: string;
   subSections: { heading: string; selected: boolean }[];
-  selected: boolean; // Add the selected property to the Section interface
+  selected: boolean; 
 }
 
 const getContentIntro = async (
@@ -72,7 +72,6 @@ const getContentHeadings = async (
         const pageId = Object.keys(pages)[0];
         const pageData = pages[pageId];
 
-        // Extract main sections and sub-sections
         const sections: Section[] = [];
         const content = pageData.extract;
         const regex = /<h[2-6]>(?:<span[^>]+>)?(.+?)(?:<\/span>)?<\/h[2-6]>/g;
@@ -134,11 +133,6 @@ export default function MainContent(props: any) {
   const [isOpenIntro, setIsOpenIntro] = useState(false);
   const [openHeadingIndexes, setOpenHeadingIndexes] = useState<number[]>([]);
   const [selectedHeadings, setSelectedHeadings] = useState<string[]>([]);
-  const [pageName, setPageName] = useState("");
-
-  useEffect(() => {
-    setPageName(props.name);
-  });
 
   useEffect(() => {
     getContentIntro(props.link, props.name, setIntroExtracts);
@@ -162,7 +156,7 @@ export default function MainContent(props: any) {
     });
   };
 
-  const getSelectedSection = async (name: string) => {
+  const getSelectedSection = async (name: string, headings: string[]) => {
     try {
       const response = await fetch(
         `https://en.wikipedia.org/w/api.php?action=opensearch&search=${name}&format=json&origin=*`
@@ -175,14 +169,9 @@ export default function MainContent(props: any) {
 
         const sections = extractResponses["parse"]["sections"];
         console.log(sections);
-        const target_headings = [
-          "People known as Alexander",
-          "Rulers of antiquity",
-          "Rulers of the Middle Ages",
-        ];
         let target_section_id = null;
 
-        for (const target_heading of target_headings) {
+        for (const target_heading of headings) {
           for (const section of sections) {
             if (section["line"] === target_heading) {
               target_section_id = section["index"];
@@ -197,10 +186,8 @@ export default function MainContent(props: any) {
               ).then((response) => response.json());
               const sectionHtml = extractData["parse"]["text"]["*"];
 
-              // Parse HTML using html-react-parser
               const parsedHtml = parse(sectionHtml);
 
-              // Extract text content from the parsed HTML
               const sectionText = extractTextFromHtml(parsedHtml);
 
               console.log(sectionText);
@@ -215,7 +202,6 @@ export default function MainContent(props: any) {
     }
   };
 
-  // Extract text content from parsed HTML recursively
   const extractTextFromHtml = (node: any): string => {
     if (typeof node === "string") {
       return node;
@@ -229,16 +215,11 @@ export default function MainContent(props: any) {
     return "";
   };
 
-  const handleButtonClick = () => {
-    getSelectedSection(props.name);
-  };
-
   const handleMainSectionClick = (index: number) => {
     setHeadingExtracts((prevExtracts) => {
       const updatedExtracts = [...prevExtracts];
       const section = updatedExtracts[index];
 
-      // Deselect all other sections
       updatedExtracts.forEach((item, i) => {
         if (i !== index) {
           item.selected = false;
@@ -256,7 +237,7 @@ export default function MainContent(props: any) {
           heading: subSection.heading,
           selected,
         }));
-        section.selected = selected; // Update the selected state of the main section
+        section.selected = selected;
       } else if (section) {
         section.selected = !section.selected;
       }
@@ -271,6 +252,7 @@ export default function MainContent(props: any) {
         }
       });
       setSelectedHeadings(selectedHeadings);
+      getSelectedSection(props.name, selectedHeadings);
       return updatedExtracts;
     });
   };
@@ -303,8 +285,8 @@ export default function MainContent(props: any) {
                 .map((sub) => sub.heading);
             }
           });
-
           setSelectedHeadings(selectedHeadings);
+          getSelectedSection(props.name, selectedHeadings);
         }
       }
       return updatedExtracts;
@@ -323,7 +305,6 @@ export default function MainContent(props: any) {
 
   return (
     <>
-      <button onClick={handleButtonClick}>CLICK ME!</button>
       <div
         className="
       scrollbar-track shadow-indigo
