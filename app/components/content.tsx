@@ -128,11 +128,17 @@ const shouldExcludeSection = (spanId: string) => {
 };
 
 export default function MainContent(props: any) {
+  var JSSoup = require("jssoup").default;
   const [introExtracts, setIntroExtracts] = useState<Section[]>([]);
   const [headingExtracts, setHeadingExtracts] = useState<Section[]>([]);
   const [isOpenIntro, setIsOpenIntro] = useState(false);
   const [openHeadingIndexes, setOpenHeadingIndexes] = useState<number[]>([]);
   const [selectedHeadings, setSelectedHeadings] = useState<string[]>([]);
+  const [pageName, setPageName] = useState("");
+
+  useEffect(() => {
+    setPageName(props.name);
+  });
 
   useEffect(() => {
     getContentIntro(props.link, props.name, setIntroExtracts);
@@ -154,6 +160,62 @@ export default function MainContent(props: any) {
         return [...prevIndexes, index];
       }
     });
+  };
+
+  const getSelectedSection = async (name: string) => {
+    try {
+      const response = await fetch(
+        `https://en.wikipedia.org/w/api.php?action=opensearch&search=${name}&format=json&origin=*`
+      );
+
+      if (response.ok) {
+        const extractResponses = await fetch(
+          `https://en.wikipedia.org/w/api.php?action=parse&format=json&origin=*&prop=sections&page=${name}`
+        ).then((response) => response.json());
+
+        const sections = extractResponses["parse"]["sections"];
+        console.log(sections);
+        const target_headings = [
+          "People known as Alexander",
+          "Rulers of antiquity",
+          "Rulers of the Middle Ages",
+        ];
+
+        let target_section_id = null;
+
+        for (const target_heading of target_headings) {
+          for (const section of sections) {
+            if (section["line"] === target_heading) {
+              target_section_id = section["index"];
+              console.log(target_section_id);
+              break;
+            }
+          }
+          if (target_section_id) {
+            try {
+              const extractData = await fetch(
+                `https://en.wikipedia.org/w/api.php?action=parse&format=json&origin=*&prop=text&page=${name}&section=${target_section_id}`
+              ).then((response) => response.json());
+              const sectionHtml = extractData["parse"]["text"]["*"];
+              // console.log(sectionHtml);
+              const soup = new JSSoup(sectionHtml, false);
+              const sectionText = soup.getText();
+              // if (target_heading != target_headings[0]) {
+                console.log(sectionText);
+              // }
+            } catch (error) {
+              console.error("Error fetching section HTML:", error);
+            }
+          }
+        }
+      }
+    } catch (error) {
+      console.error("Error fetching section content:", error);
+    }
+  };
+
+  const handleButtonClick = () => {
+    getSelectedSection(props.name);
   };
 
   const handleMainSectionClick = (index: number) => {
@@ -246,6 +308,7 @@ export default function MainContent(props: any) {
 
   return (
     <>
+      <button onClick={handleButtonClick}>CLICK ME!</button>
       <div
         className="
       scrollbar-track shadow-indigo
