@@ -242,10 +242,16 @@ export default function MainContent(props: any) {
       }
       const selectedHeadings = updatedExtracts.flatMap((section) => {
         if (section.selected) {
-          return [
-            section.heading,
-            ...section.subSections.map((sub) => sub.heading),
-          ];
+          if (
+            section.subSections.every((sub) => sub.selected)
+          ) {
+            return [section.heading];
+          } else {
+            return [
+              section.heading,
+              ...section.subSections.map((sub) => sub.heading),
+            ];
+          }
         } else {
           return [];
         }
