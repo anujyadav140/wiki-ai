@@ -264,16 +264,13 @@ export default function MainContent(props: any) {
         const subSection = section.subSections[subIndex];
         if (subSection) {
           subSection.selected = !subSection.selected;
-
+  
           const selectedHeadings = updatedExtracts.flatMap((section) => {
             if (section.subSections.some((sub) => sub.selected)) {
               section.selected = true;
-              return [
-                section.heading,
-                ...section.subSections
-                  .filter((sub) => sub.selected)
-                  .map((sub) => sub.heading),
-              ];
+              return section.subSections
+                .filter((sub) => sub.selected)
+                .map((sub) => sub.heading);
             } else if (section.subSections.every((sub) => !sub.selected)) {
               section.selected = false;
               return [];
@@ -291,6 +288,7 @@ export default function MainContent(props: any) {
       return updatedExtracts;
     });
   };
+  
 
   const notify = () => {
     if (selectedHeadings.length === 0) {
