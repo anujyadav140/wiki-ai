@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 import Sidebar from "./sidebar/sidebar";
 import toast, { Toaster } from "react-hot-toast";
+import parse from "html-react-parser";
 
 interface Section {
   heading: string;
@@ -180,7 +181,6 @@ export default function MainContent(props: any) {
           "Rulers of antiquity",
           "Rulers of the Middle Ages",
         ];
-
         let target_section_id = null;
 
         for (const target_heading of target_headings) {
@@ -197,12 +197,14 @@ export default function MainContent(props: any) {
                 `https://en.wikipedia.org/w/api.php?action=parse&format=json&origin=*&prop=text&page=${name}&section=${target_section_id}`
               ).then((response) => response.json());
               const sectionHtml = extractData["parse"]["text"]["*"];
-              // console.log(sectionHtml);
-              const soup = new JSSoup(sectionHtml, false);
-              const sectionText = soup.getText();
-              // if (target_heading != target_headings[0]) {
-                console.log(sectionText);
-              // }
+
+              // Parse HTML using html-react-parser
+              const parsedHtml = parse(sectionHtml);
+
+              // Extract text content from the parsed HTML
+              const sectionText = extractTextFromHtml(parsedHtml);
+
+              console.log(sectionText);
             } catch (error) {
               console.error("Error fetching section HTML:", error);
             }
@@ -212,6 +214,20 @@ export default function MainContent(props: any) {
     } catch (error) {
       console.error("Error fetching section content:", error);
     }
+  };
+
+  // Extract text content from parsed HTML recursively
+  const extractTextFromHtml = (node: any): string => {
+    if (typeof node === "string") {
+      return node;
+    }
+    if (node && node.props && node.props.children) {
+      if (Array.isArray(node.props.children)) {
+        return node.props.children.map(extractTextFromHtml).join("");
+      }
+      return extractTextFromHtml(node.props.children);
+    }
+    return "";
   };
 
   const handleButtonClick = () => {
