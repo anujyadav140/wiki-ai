@@ -129,7 +129,6 @@ const shouldExcludeSection = (spanId: string) => {
 };
 
 export default function MainContent(props: any) {
-  var JSSoup = require("jssoup").default;
   const [introExtracts, setIntroExtracts] = useState<Section[]>([]);
   const [headingExtracts, setHeadingExtracts] = useState<Section[]>([]);
   const [isOpenIntro, setIsOpenIntro] = useState(false);
