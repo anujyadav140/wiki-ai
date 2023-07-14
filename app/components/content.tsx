@@ -168,7 +168,6 @@ export default function MainContent(props: any) {
         ).then((response) => response.json());
 
         const sections = extractResponses["parse"]["sections"];
-        console.log(sections);
         let target_section_id = null;
 
         for (const target_heading of headings) {
