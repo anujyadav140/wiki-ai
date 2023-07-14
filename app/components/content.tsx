@@ -298,7 +298,7 @@ export default function MainContent(props: any) {
 
   const notify = () => {
     if (selectedHeadings.length === 0) {
-      toast("You have to select one section for the AI generation to work");
+      toast("You have to select atleast one section for the AI generation to work");
     }
   };
 

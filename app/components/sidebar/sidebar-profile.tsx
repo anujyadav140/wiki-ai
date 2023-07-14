@@ -11,8 +11,8 @@ const UserProfile = ({toggle}:{toggle:any}) => {
     >
       <div className="min-w-[3.5rem] h-[3.5rem]">
         <img
-          src="../../assets/anuj.jpg"
-          alt=""
+          src="/anuj.jpg"
+          alt="Profile picture"
           className="w-full h-full rounded-full object-cover"
         />
       </div>
