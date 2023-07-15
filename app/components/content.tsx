@@ -5,6 +5,8 @@ import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 import Sidebar from "./sidebar/sidebar";
 import toast, { Toaster } from "react-hot-toast";
 import parse from "html-react-parser";
+import { ChatOpenAI } from "langchain/chat_models/openai";
+import { HumanMessage, SystemMessage } from "langchain/schema";
 
 interface Section {
   heading: string;
@@ -133,6 +135,7 @@ export default function MainContent(props: any) {
   const [isOpenIntro, setIsOpenIntro] = useState(false);
   const [openHeadingIndexes, setOpenHeadingIndexes] = useState<number[]>([]);
   const [selectedHeadings, setSelectedHeadings] = useState<string[]>([]);
+  const [summary, setSummary] = useState("");
 
   useEffect(() => {
     getContentIntro(props.link, props.name, setIntroExtracts);
@@ -191,7 +194,8 @@ export default function MainContent(props: any) {
 
               const cleanedSectionText = sectionText.replace(/(\[\s*([^[\]]+?)\s*\])|\^\s*.+|[,.:;""'‘’“”]/g, '');
 
-              console.log(cleanedSectionText);
+              // console.log(cleanedSectionText);
+              generateSummary(cleanedSectionText);
             } catch (error) {
               console.error("Error fetching section HTML:", error);
             }
@@ -201,6 +205,21 @@ export default function MainContent(props: any) {
     } catch (error) {
       console.error("Error fetching section content:", error);
     }
+  };
+
+  const generateSummary = async (text: string) => {
+    const chat = new ChatOpenAI({
+      openAIApiKey: "<insert open ai key here>",
+      temperature: 0,
+    });
+      const response = await chat.call([
+        new SystemMessage(
+          "You are a very helpful summarizer, you will summarize 1000s of words of text in bullet points"
+        ),
+        new HumanMessage(text),
+      ]);
+      setSummary(response.lc_kwargs.content);
+      console.log(response.lc_kwargs.content);
   };
 
   const extractTextFromHtml = (node: any): string => {
@@ -318,6 +337,7 @@ export default function MainContent(props: any) {
           text-gray-600 shadow-xl
        scrollbar-thin scrollbar-thumb-indigo-600"
       >
+      <p>{summary}</p>
         <h1>{props.name}</h1>
         <Divider />
         <h1>{props.link}</h1>
