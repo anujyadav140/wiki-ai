@@ -189,7 +189,9 @@ export default function MainContent(props: any) {
 
               const sectionText = extractTextFromHtml(parsedHtml);
 
-              console.log(sectionText);
+              const cleanedSectionText = sectionText.replace(/(\[\s*([^[\]]+?)\s*\])|\^\s*.+|[,.:;""'‘’“”]/g, '');
+
+              console.log(cleanedSectionText);
             } catch (error) {
               console.error("Error fetching section HTML:", error);
             }
