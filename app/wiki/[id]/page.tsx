@@ -12,7 +12,7 @@ export default function WikiAiPage({ params }: { params: { id: string } }) {
     <>
       <main className="overflow-x-hidden">
         <div className="bg-back flex h-screen object-cover">
-          <Sidebar navBar="isNavBar" left="isLeft" />
+          {/* <Sidebar navBar="isNavBar" left="isLeft" /> */}
           {/* <div className="flex items-center justify-center flex-grow flex-col"> */}
             <MainContent name={wikiName} link={linkUrl} />
           {/* </div> */}

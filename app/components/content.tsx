@@ -11,7 +11,7 @@ import { HumanMessage, SystemMessage } from "langchain/schema";
 interface Section {
   heading: string;
   subSections: { heading: string; selected: boolean }[];
-  selected: boolean; 
+  selected: boolean;
 }
 
 const getContentIntro = async (
@@ -192,7 +192,10 @@ export default function MainContent(props: any) {
 
               const sectionText = extractTextFromHtml(parsedHtml);
 
-              const cleanedSectionText = sectionText.replace(/(\[\s*([^[\]]+?)\s*\])|\^\s*.+|[,.:;""'‘’“”]/g, '');
+              const cleanedSectionText = sectionText.replace(
+                /(\[\s*([^[\]]+?)\s*\])|\^\s*.+|[,.:;""'‘’“”]/g,
+                ""
+              );
 
               // console.log(cleanedSectionText);
               generateSummary(cleanedSectionText);
@@ -209,17 +212,17 @@ export default function MainContent(props: any) {
 
   const generateSummary = async (text: string) => {
     const chat = new ChatOpenAI({
-      openAIApiKey: "<insert open ai key here>",
+      openAIApiKey: "INSERT OPENAI API KEY",
       temperature: 0,
     });
-      const response = await chat.call([
-        new SystemMessage(
-          "You are a very helpful summarizer, you will summarize 1000s of words of text in bullet points"
-        ),
-        new HumanMessage(text),
-      ]);
-      setSummary(response.lc_kwargs.content);
-      console.log(response.lc_kwargs.content);
+    const response = await chat.call([
+      new SystemMessage(
+        "You are a very helpful summarizer, you will summarize 1000s of words of text in bullet points"
+      ),
+      new HumanMessage(text),
+    ]);
+    setSummary(response.lc_kwargs.content);
+    console.log(response.lc_kwargs.content);
   };
 
   const extractTextFromHtml = (node: any): string => {
@@ -263,9 +266,7 @@ export default function MainContent(props: any) {
       }
       const selectedHeadings = updatedExtracts.flatMap((section) => {
         if (section.selected) {
-          if (
-            section.subSections.every((sub) => sub.selected)
-          ) {
+          if (section.subSections.every((sub) => sub.selected)) {
             return [section.heading];
           } else {
             return [
@@ -291,7 +292,7 @@ export default function MainContent(props: any) {
         const subSection = section.subSections[subIndex];
         if (subSection) {
           subSection.selected = !subSection.selected;
-  
+
           const selectedHeadings = updatedExtracts.flatMap((section) => {
             if (section.subSections.some((sub) => sub.selected)) {
               section.selected = true;
@@ -315,17 +316,19 @@ export default function MainContent(props: any) {
       return updatedExtracts;
     });
   };
-  
 
   const notify = () => {
     if (selectedHeadings.length === 0) {
-      toast("You have to select atleast one section for the AI generation to work");
+      toast(
+        "You have to select atleast one section for the AI generation to work"
+      );
     }
   };
 
   useEffect(() => {
     console.log(selectedHeadings);
   }, [selectedHeadings]);
+  
 
   return (
     <>
@@ -333,26 +336,38 @@ export default function MainContent(props: any) {
         className="
       scrollbar-track shadow-indigo
       ml-auto mr-auto max-h-screen 
-        w-2/3 overflow-y-auto overflow-x-hidden rounded-xl bg-white bg-opacity-30   p-4 text-sm  font-medium
-          text-gray-600 shadow-xl
+        w-2/3 overflow-y-auto overflow-x-hidden rounded-xl bg-gradient-to-br from-purple-200 to-transparent via-purple-300 p-4 text-sm  font-medium
+          text-black shadow-xl
        scrollbar-thin scrollbar-thumb-indigo-600"
       >
-      <p>{summary}</p>
-        <h1>{props.name}</h1>
-        <Divider />
-        <h1>{props.link}</h1>
+        <p>{summary}</p>
+        <h1 className="font-serif text-2xl font-bold text-black">
+          {props.name}
+        </h1>
+        <Divider className="bg-black" />
+        <h1>
+          <a
+            href={props.link}
+            target="_blank"
+            className="text-blue-500 underline hover:text-blue-700"
+          >
+            {props.link}
+          </a>
+        </h1>
         {introExtracts.map((section: Section, index: number) => (
           <motion.div
-            key={index}
-            layout
-            className="my-6 rounded-md bg-white px-8 py-5"
-          >
-            <div className="flex items-center justify-between">
+          key={index}
+          layout
+          className={`my-6 rounded-3xl border-glass bg-glass px-8 py-5 hover:bg-white ${
+            openHeadingIndexes.includes(index) ? "bg-blue-100" : ""
+          }`}
+        >
+            <div className="flex items-center justify-between font-serif text-xl font-semibold text-black">
               <motion.h2 layout>
                 {section.heading.replace(/<[^>]+>/g, "")}
               </motion.h2>
               <div
-                className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-gray-200 hover:bg-gray-300 active:bg-gray-400"
+                className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-gray-200 hover:bg-purple-300 active:bg-gray-400"
                 onClick={(e) => {
                   e.stopPropagation();
                   handleIntroClick();
@@ -373,7 +388,7 @@ export default function MainContent(props: any) {
                 ) => (
                   <motion.p
                     key={subIndex}
-                    className="my-6 rounded-md bg-gray-300 px-8 py-5"
+                    className="my-6 rounded-md bg-white px-8 py-5 hover:bg-blue-100"
                   >
                     {subSection.heading.replace(/<[^>]+>/g, "")}
                   </motion.p>
@@ -384,14 +399,14 @@ export default function MainContent(props: any) {
 
         {headingExtracts.map((section: Section, index: number) => (
           <motion.div
-            key={index}
-            layout
-            className={`my-6 rounded-md bg-white px-8 py-5 ${
-              openHeadingIndexes.includes(index) ? "bg-blue-100" : ""
-            }`}
-          >
+          key={index}
+          layout
+          className={`my-6 rounded-3xl border-glass bg-glass px-8 py-5 hover:bg-white ${
+            openHeadingIndexes.includes(index) ? "bg-blue-100" : ""
+          }`}
+        >
             <div className="flex items-center justify-between">
-              <motion.h2 layout>
+              <motion.h2 className="flex items-center justify-between font-serif text-xl font-semibold text-black" layout>
                 <input
                   type="checkbox"
                   className="mr-2"
@@ -408,7 +423,7 @@ export default function MainContent(props: any) {
               </motion.h2>
               {section.subSections.length > 0 && (
                 <div
-                  className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-gray-200 hover:bg-gray-300 active:bg-gray-400"
+                  className="flex h-8 w-8 cursor-pointer font-semibold items-center justify-center rounded-full bg-gray-200 hover:bg-purple-300 active:bg-gray-400"
                   onClick={(e) => {
                     e.stopPropagation();
                     handleHeadingClick(index);
@@ -430,7 +445,7 @@ export default function MainContent(props: any) {
                 ) => (
                   <motion.p
                     key={subIndex}
-                    className="my-6 rounded-md bg-gray-300 px-8 py-5"
+                    className="my-6 rounded-md bg-white px-8 py-5 hover:bg-blue-100"
                   >
                     <input
                       type="checkbox"

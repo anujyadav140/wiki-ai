@@ -85,8 +85,9 @@ function Search() {
   }, []);
 
   return (
+    <>
     <div
-      className={!isMobileScreen ? "ml-40 mr-40 mt-32" : "ml-10 mr-10 mt-10"}
+      className={!isMobileScreen ? "ml-40 mr-40 mt-12" : "ml-10 mr-10 mt-10"}
     >
       {!isMobileScreen ? (
         <div className="w-300 relative">
@@ -265,6 +266,7 @@ function Search() {
         </div>
       )}
     </div>
+    </>
   );
 }
 export default Search;
