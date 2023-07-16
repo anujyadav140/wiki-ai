@@ -349,6 +349,7 @@ export default function MainContent(props: any) {
           <a
             href={props.link}
             target="_blank"
+            rel="noreferrer"
             className="text-blue-500 underline hover:text-blue-700"
           >
             {props.link}
