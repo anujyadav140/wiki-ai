@@ -135,6 +135,7 @@ export default function MainContent(props: any) {
   const [isOpenIntro, setIsOpenIntro] = useState(false);
   const [openHeadingIndexes, setOpenHeadingIndexes] = useState<number[]>([]);
   const [selectedHeadings, setSelectedHeadings] = useState<string[]>([]);
+  const [toDoSummaryText, setToDoSummaryText] = useState("");
   const [summary, setSummary] = useState("");
 
   useEffect(() => {
@@ -198,7 +199,8 @@ export default function MainContent(props: any) {
               );
 
               // console.log(cleanedSectionText);
-              generateSummary(cleanedSectionText);
+              // generateSummary(cleanedSectionText);
+              setToDoSummaryText(cleanedSectionText);
             } catch (error) {
               console.error("Error fetching section HTML:", error);
             }
@@ -210,19 +212,20 @@ export default function MainContent(props: any) {
     }
   };
 
-  const generateSummary = async (text: string) => {
-    const chat = new ChatOpenAI({
-      openAIApiKey: "INSERT OPENAI API KEY",
-      temperature: 0,
-    });
-    const response = await chat.call([
-      new SystemMessage(
-        "You are a very helpful summarizer, you will summarize 1000s of words of text in bullet points"
-      ),
-      new HumanMessage(text),
-    ]);
-    setSummary(response.lc_kwargs.content);
-    console.log(response.lc_kwargs.content);
+  const generateSummary = async (buttonText: string) => {
+    console.log(buttonText);
+    // const chat = new ChatOpenAI({
+    //   openAIApiKey: "",
+    //   temperature: 0,
+    // });
+    // const response = await chat.call([
+    //   new SystemMessage(
+    //     "You are a very helpful summarizer, you will summarize 1000s of words of text in bullet points"
+    //   ),
+    //   new HumanMessage(toDoSummaryText),
+    // ]);
+    // setSummary(response.lc_kwargs.content);
+    // console.log(response.lc_kwargs.content);
   };
 
   const extractTextFromHtml = (node: any): string => {
@@ -463,7 +466,7 @@ export default function MainContent(props: any) {
       </div>
       <div className="right-0 top-0 h-screen">
         <button onClick={notify}>
-          <Sidebar taskBar="isTaskBar" right="isRight" />
+          <Sidebar taskBar="isTaskBar" right="isRight" handleClick={generateSummary} />
         </button>
         <Toaster />
       </div>

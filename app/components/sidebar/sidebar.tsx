@@ -137,7 +137,7 @@ const Sidebar = (props: any) => {
       ) : (
         <div className={`${toggle ? "w-[5.8rem]" : ""} taskbar-container`}>
           {/* <UserProfile toggle={toggle} /> */}
-          <TaskbarData toggle={toggle} />
+          <TaskbarData toggle={toggle} handleClick={props.handleClick} />
           <div
             className="absolute -left-5 top-[7rem] flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-glass"
             onClick={handleToggle}
