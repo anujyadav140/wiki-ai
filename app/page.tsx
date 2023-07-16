@@ -1,3 +1,4 @@
+"use client"
 import Login from "./components/authentication/login";
 import MainContent from "./components/content";
 import Tab from "./components/tabs/tab";
