@@ -4,19 +4,27 @@ import React, { useState, ChangeEvent, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 
-function Search() {
+const Search = (props: any) => {
   const [searchQuery, setSearchQuery] = useState("");
   const [suggestions, setSuggestions] = useState<string[]>([]);
   const [links, setLinks] = useState<string[]>([]);
   const [extracts, setExtracts] = useState<string[]>([]);
   const [images, setImages] = useState<string[]>([]);
   const [isMobileScreen, setIsMobileScreen] = useState(false);
+  const [renderAnimation, setRenderAnimation] = useState(true);
 
   const handleChange = async (event: ChangeEvent<HTMLInputElement>) => {
     const query = event.target.value;
     setSearchQuery(query);
 
-    if (query.length > 5) {
+    if (query.length <= 3) {
+      setRenderAnimation(true);
+      props.handleChange(renderAnimation);
+    }
+
+    if (query.length > 3) {
+      setRenderAnimation(false);
+      props.handleChange(renderAnimation);
       try {
         const response = await fetch(
           `https://en.wikipedia.org/w/api.php?action=opensearch&search=${query}&format=json&origin=*`
@@ -123,7 +131,6 @@ function Search() {
               </div>
             </div>
           </form>
-          <div className="W-100">
             <div className="mb-10 mt-2 max-h-screen flex-grow overflow-y-auto overflow-x-hidden rounded-md scrollbar-thin scrollbar-thumb-indigo-600 hover:overflow-x-visible">
               {suggestions.length > 0 && (
                 <ul className="mr-4 mt-4 grid gap-4">
@@ -184,7 +191,6 @@ function Search() {
               )}
             </div>
           </div>
-        </div>
       ) : (
         <div>
           <form>

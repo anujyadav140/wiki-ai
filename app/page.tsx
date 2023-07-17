@@ -9,7 +9,7 @@ import River from "./river";
 
 export default function Home() {
   return (
-    <main>
+    <>
       {/* <Login /> */}
       <HomePage />
       {/* <River /> */}
@@ -18,6 +18,6 @@ export default function Home() {
       {/* <WikiAiPage /> */}
       {/* <MainContent /> */}
       {/* <Langchain /> */}
-    </main>
+    </>
   );
 }
