@@ -6,7 +6,7 @@ import Lottie from "react-lottie-player";
 import lottieJson from "../../public/robot.json";
 
 export default function HomePage(props: any) {
-  const [renderBoolAnimation, setRenderBoolAnimation] = useState(false);
+  const [renderBoolAnimation, setRenderBoolAnimation] = useState(true);
   const renderAnimation: (boolRender: boolean) => void = (boolRender) => {
     console.log(boolRender);
     setRenderBoolAnimation(boolRender);
