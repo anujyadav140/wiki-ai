@@ -135,9 +135,9 @@ export default function MainContent(props: any) {
   const [openHeadingIndexes, setOpenHeadingIndexes] = useState<number[]>([]);
   const [selectedHeadings, setSelectedHeadings] = useState<string[]>([]);
   const [toDoSummaryText, setToDoSummaryText] = useState("");
-  const [summary, setSummary] = useState("");
   const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
   const [newCheckboxChecked, setNewCheckboxChecked] = useState(false);
+  const [generatedSummary, setGeneratedSummary] = useState("");
 
   useEffect(() => {
     getContentIntro(props.link, props.name, setIntroExtracts);
@@ -238,7 +238,7 @@ export default function MainContent(props: any) {
     const summaryResponse = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tempor aliquam nunc, id consequat diam fermentum vel. Vestibulum porta neque sed massa maximus varius. Duis nec ipsum sem. Curabitur ullamcorper est vel nibh cursus, a interdum ante cursus. Morbi facilisis ullamcorper sem, ut semper elit scelerisque at. Donec interdum cursus leo, eget venenatis metus ullamcorper at. Aenean non mi augue. Pellentesque sagittis viverra dui, et tincidunt erat pulvinar vitae. Proin at ipsum quis ligula venenatis facilisis eu nec quam. Sed vel purus nec dui varius consectetur. Nulla facilisi. Ut ut felis mauris. Proin gravida ante id leo tincidunt, a vestibulum arcu lacinia. Donec id sapien sed felis suscipit congue in sit amet lacus.`
     console.log(summaryResponse);
     // setSummary(summaryResponse.generations[0][0].text);
-    setSummary(summaryResponse);
+    setGeneratedSummary(summaryResponse);
     setNewCheckboxChecked(false);
     }
   };
@@ -259,6 +259,7 @@ export default function MainContent(props: any) {
   const handleMainSectionClick = (index: number) => {
     setIsCheckboxChecked(true);
     if (isCheckboxChecked) {
+      setGeneratedSummary("");
       setNewCheckboxChecked(true);
       console.log("New Checkbox Checked!");
     }
@@ -309,6 +310,11 @@ export default function MainContent(props: any) {
 
   const handleSubSectionClick = (mainIndex: number, subIndex: number) => {
     setIsCheckboxChecked(true);
+    if (isCheckboxChecked) {
+      setGeneratedSummary("");
+      setNewCheckboxChecked(true);
+      console.log("New Checkbox Checked!");
+    }
     setHeadingExtracts((prevExtracts) => {
       const updatedExtracts = [...prevExtracts];
       const section = updatedExtracts[mainIndex];
@@ -358,15 +364,8 @@ export default function MainContent(props: any) {
 
   return (
     <>
-      <div
-        className="
-      scrollbar-track shadow-indigo
-      ml-auto mr-auto max-h-screen 
-        w-2/3 overflow-y-auto overflow-x-hidden rounded-xl bg-gradient-to-br from-purple-200 to-transparent via-purple-300 p-4 text-sm  font-medium
-          text-black shadow-xl
-       scrollbar-thin scrollbar-thumb-indigo-600"
-      >
-        <p>{summary}</p>
+      <div className="scrollbar-track shadow-indigo ml-auto mr-auto max-h-screen w-2/3 overflow-y-auto overflow-x-hidden rounded-xl bg-gradient-to-br from-purple-200 to-transparent via-purple-300 p-4 text-sm font-medium text-black shadow-xl scrollbar-thin scrollbar-thumb-indigo-600">
+        {/* <p>{summary}</p> */}
         <h1 className="font-serif text-2xl font-bold text-black">
           {props.name}
         </h1>
@@ -383,12 +382,12 @@ export default function MainContent(props: any) {
         </h1>
         {introExtracts.map((section: Section, index: number) => (
           <motion.div
-          key={index}
-          layout
-          className={`my-6 rounded-3xl border-glass bg-glass px-8 py-5 hover:bg-white ${
-            openHeadingIndexes.includes(index) ? "bg-blue-100" : ""
-          }`}
-        >
+            key={index}
+            layout
+            className={`my-6 rounded-3xl border-glass bg-glass px-8 py-5 hover:bg-white ${
+              openHeadingIndexes.includes(index) ? "bg-blue-100" : ""
+            }`}
+          >
             <div className="flex items-center justify-between font-serif text-xl font-semibold text-black">
               <motion.h2 layout>
                 {section.heading.replace(/<[^>]+>/g, "")}
@@ -423,15 +422,15 @@ export default function MainContent(props: any) {
               )}
           </motion.div>
         ))}
-
+  
         {headingExtracts.map((section: Section, index: number) => (
           <motion.div
-          key={index}
-          layout
-          className={`my-6 rounded-3xl border-glass bg-glass px-8 py-5 hover:bg-white ${
-            openHeadingIndexes.includes(index) ? "bg-blue-100" : ""
-          }`}
-        >
+            key={index}
+            layout
+            className={`my-6 rounded-3xl border-glass bg-glass px-8 py-5 hover:bg-white ${
+              openHeadingIndexes.includes(index) ? "bg-blue-100" : ""
+            }`}
+          >
             <div className="flex items-center justify-between">
               <motion.h2 className="flex items-center justify-between font-serif text-xl font-semibold text-black" layout>
                 <input
@@ -484,6 +483,11 @@ export default function MainContent(props: any) {
                   </motion.p>
                 )
               )}
+            {section.selected && (
+              <div className="summary-container">
+                <p>{generatedSummary}</p>
+              </div>
+            )}
           </motion.div>
         ))}
       </div>
@@ -495,4 +499,4 @@ export default function MainContent(props: any) {
       </div>
     </>
   );
-}
+}  
