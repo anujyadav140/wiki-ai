@@ -5,7 +5,11 @@ import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 import Sidebar from "./sidebar/sidebar";
 import toast, { Toaster } from "react-hot-toast";
 import parse from "html-react-parser";
-import { ChatPromptTemplate, HumanMessagePromptTemplate, SystemMessagePromptTemplate } from "langchain/prompts";
+import {
+  ChatPromptTemplate,
+  HumanMessagePromptTemplate,
+  SystemMessagePromptTemplate,
+} from "langchain/prompts";
 
 interface Section {
   heading: string;
@@ -216,30 +220,31 @@ export default function MainContent(props: any) {
   const generateSummary = async (buttonText: string) => {
     if (isCheckboxChecked) {
       console.log(buttonText);
-    // const chat = new ChatOpenAI({
-    //   openAIApiKey: "",
-    //   temperature: 0,
-    // });
+      // const chat = new ChatOpenAI({
+      //   openAIApiKey: "",
+      //   temperature: 0,
+      // });
 
-    const template = "You are a very helpful summarizer, you will summarize 1000s of words of text in {instruction}";
-    const summaryPrompt = ChatPromptTemplate.fromPromptMessages([
-      SystemMessagePromptTemplate.fromTemplate(template),
-      HumanMessagePromptTemplate.fromTemplate("{toDoSummaryText}"),
-    ]);
+      const template =
+        "You are a very helpful summarizer, you will summarize 1000s of words of text in {instruction}";
+      const summaryPrompt = ChatPromptTemplate.fromPromptMessages([
+        SystemMessagePromptTemplate.fromTemplate(template),
+        HumanMessagePromptTemplate.fromTemplate("{toDoSummaryText}"),
+      ]);
 
-    console.log(summaryPrompt);
-    
-    // const summaryResponse = await chat.generatePrompt([
-    //   await summaryPrompt.formatPromptValue({
-    //     instruction: buttonText,
-    //     toDoSummaryText: toDoSummaryText,
-    //   }),
-    // ]);
-    const summaryResponse = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tempor aliquam nunc, id consequat diam fermentum vel. Vestibulum porta neque sed massa maximus varius. Duis nec ipsum sem. Curabitur ullamcorper est vel nibh cursus, a interdum ante cursus. Morbi facilisis ullamcorper sem, ut semper elit scelerisque at. Donec interdum cursus leo, eget venenatis metus ullamcorper at. Aenean non mi augue. Pellentesque sagittis viverra dui, et tincidunt erat pulvinar vitae. Proin at ipsum quis ligula venenatis facilisis eu nec quam. Sed vel purus nec dui varius consectetur. Nulla facilisi. Ut ut felis mauris. Proin gravida ante id leo tincidunt, a vestibulum arcu lacinia. Donec id sapien sed felis suscipit congue in sit amet lacus.`
-    console.log(summaryResponse);
-    // setSummary(summaryResponse.generations[0][0].text);
-    setGeneratedSummary(summaryResponse);
-    setNewCheckboxChecked(false);
+      console.log(summaryPrompt);
+
+      // const summaryResponse = await chat.generatePrompt([
+      //   await summaryPrompt.formatPromptValue({
+      //     instruction: buttonText,
+      //     toDoSummaryText: toDoSummaryText,
+      //   }),
+      // ]);
+      const summaryResponse = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tempor aliquam nunc, id consequat diam fermentum vel. Vestibulum porta neque sed massa maximus varius. Duis nec ipsum sem. Curabitur ullamcorper est vel nibh cursus, a interdum ante cursus. Morbi facilisis ullamcorper sem, ut semper elit scelerisque at. Donec interdum cursus leo, eget venenatis metus ullamcorper at. Aenean non mi augue. Pellentesque sagittis viverra dui, et tincidunt erat pulvinar vitae. Proin at ipsum quis ligula venenatis facilisis eu nec quam. Sed vel purus nec dui varius consectetur. Nulla facilisi. Ut ut felis mauris. Proin gravida ante id leo tincidunt, a vestibulum arcu lacinia. Donec id sapien sed felis suscipit congue in sit amet lacus.`;
+      console.log(summaryResponse);
+      // setSummary(summaryResponse.generations[0][0].text);
+      setGeneratedSummary(summaryResponse);
+      setNewCheckboxChecked(false);
     }
   };
 
@@ -360,7 +365,6 @@ export default function MainContent(props: any) {
   useEffect(() => {
     console.log(selectedHeadings);
   }, [selectedHeadings]);
-  
 
   return (
     <>
@@ -384,9 +388,9 @@ export default function MainContent(props: any) {
           <motion.div
             key={index}
             layout
-            className={`my-6 rounded-3xl border-glass bg-glass px-8 py-5 hover:bg-white ${
+            className={`my-6 rounded-3xl border-glass bg-glass px-8 py-5 hover:bg-violet-400 ${
               openHeadingIndexes.includes(index) ? "bg-blue-100" : ""
-            }`}
+            } ${section.selected ? "border-2 border-indigo-500" : ""}`}
           >
             <div className="flex items-center justify-between font-serif text-xl font-semibold text-black">
               <motion.h2 layout>
@@ -414,7 +418,10 @@ export default function MainContent(props: any) {
                 ) => (
                   <motion.p
                     key={subIndex}
-                    className="my-6 rounded-md bg-white px-8 py-5 hover:bg-blue-100"
+                    className={`my-6 rounded-md bg-purple-300 px-8 py-5 text-base ${
+                      subSection.selected ? "border-2 border-indigo-500" : ""
+                    }`}
+                    // whileHover={{ scale: 1.03 }} 
                   >
                     {subSection.heading.replace(/<[^>]+>/g, "")}
                   </motion.p>
@@ -422,20 +429,23 @@ export default function MainContent(props: any) {
               )}
           </motion.div>
         ))}
-  
+
         {headingExtracts.map((section: Section, index: number) => (
           <motion.div
             key={index}
             layout
-            className={`my-6 rounded-3xl border-glass bg-glass px-8 py-5 hover:bg-white ${
+            className={`my-6 rounded-3xl border-glass bg-glass px-8 py-5 hover:bg-violet-400 ${
               openHeadingIndexes.includes(index) ? "bg-blue-100" : ""
-            }`}
+            } ${section.selected ? "border-2 border-indigo-500" : ""}`}
           >
             <div className="flex items-center justify-between">
-              <motion.h2 className="flex items-center justify-between font-serif text-xl font-semibold text-black" layout>
+              <motion.h2
+                className="flex items-center justify-between font-serif text-xl font-semibold text-black"
+                layout
+              >
                 <input
                   type="checkbox"
-                  className="mr-2"
+                  className="mr-2 h-4 w-4 text-indigo-500 rounded"
                   checked={
                     section.subSections.length > 0
                       ? section.subSections.every(
@@ -471,11 +481,14 @@ export default function MainContent(props: any) {
                 ) => (
                   <motion.p
                     key={subIndex}
-                    className="my-6 rounded-md bg-white px-8 py-5 hover:bg-blue-100"
+                    className={`my-6 rounded-md bg-purple-300 px-8 py-5 text-base ${
+                      subSection.selected ? "border-2 border-indigo-500" : ""
+                    }`}
+                    whileHover={{ scale: 1.03 }} 
                   >
                     <input
                       type="checkbox"
-                      className="mr-2"
+                      className="mr-2 h-4 w-4 text-indigo-500 rounded"
                       checked={subSection.selected}
                       onChange={() => handleSubSectionClick(index, subIndex)}
                     />
@@ -493,10 +506,15 @@ export default function MainContent(props: any) {
       </div>
       <div className="right-0 top-0 h-screen">
         <button onClick={notify}>
-          <Sidebar taskBar="isTaskBar" right="isRight" handleClick={generateSummary} newCheckboxChecked={newCheckboxChecked} />
+          <Sidebar
+            taskBar="isTaskBar"
+            right="isRight"
+            handleClick={generateSummary}
+            newCheckboxChecked={newCheckboxChecked}
+          />
         </button>
         <Toaster />
       </div>
     </>
   );
-}  
+}
