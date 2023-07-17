@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { dataTaskBar } from "./data";
 
 const TaskbarData = (props: any) => {
@@ -6,10 +6,15 @@ const TaskbarData = (props: any) => {
 
   const handleClick = (index: number) => {
     const clickedData = dataTaskBar[index].text;
-    // console.log("Clicked button:", clickedData);
     setSelectedItem(index);
-    props.handleClick(clickedData); // Trigger the handleClick function from the parent component
+    props.handleClick(clickedData);
   };
+
+  useEffect(() => {
+    if (props.newCheckboxChecked) {
+      setSelectedItem(null);
+    }
+  }, [props.newCheckboxChecked]);
 
   return (
     <div className="">
@@ -21,8 +26,11 @@ const TaskbarData = (props: any) => {
               props.toggle ? "last:w-[3.6rem]" : "last:w-[17rem]"
             } sidebar`}
             key={data.id}
-            onClick={() => handleClick(index)} // Add onClick event handler
-            style={{ background: isSelected ? "white" : "transparent" }}
+            onClick={() => handleClick(index)}
+            style={{
+              background: isSelected ? "white" : "transparent",
+              opacity: props.newCheckboxChecked ? "1" : "",
+            }}
           >
             <div className="mr-8 text-[1.7rem] text-brown">{data.icon}</div>
             <div

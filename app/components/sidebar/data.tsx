@@ -1,9 +1,10 @@
-import { FiUser, FiLogOut } from "react-icons/fi";
+import { FiLogOut } from "react-icons/fi";
 import { AiOutlineFileSearch, AiOutlineFileText, AiOutlineMessage } from "react-icons/ai";
-import { BsFolder, BsWallet2, BsBookmarks } from "react-icons/bs";
+import { BsEmojiSunglasses, BsBookmarks } from "react-icons/bs";
 import { BiAlignLeft, BiImages } from "react-icons/bi";
 import { HiOutlineListBullet } from "react-icons/hi2";
 import { VscSymbolKeyword } from "react-icons/vsc";
+import { LiaPagelines } from "react-icons/lia";
 
 export const dataNavBar = [
   {
@@ -51,7 +52,12 @@ export const dataTaskBar = [
   },
   {
     id: 3,
-    icon: <VscSymbolKeyword />,
-    text: "Keyword Search",
+    icon: <LiaPagelines />,
+    text: "Poetic Form",
+  },
+  {
+    id: 4,
+    icon: <BsEmojiSunglasses />,
+    text: "Summary with Emojis 😃",
   },
 ]

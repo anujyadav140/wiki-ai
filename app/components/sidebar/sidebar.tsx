@@ -14,7 +14,7 @@ import { Divider, ListItemButton } from "@mui/material";
 const Sidebar = (props: any) => {
   const [toggle, setToggle] = useState(true);
   const [isMobileScreen, setIsMobileScreen] = useState(false);
-
+  const [isNewCheckboxChecked, setIsNewCheckboxChecked] = useState(false);
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth < 740) {
@@ -31,6 +31,10 @@ const Sidebar = (props: any) => {
       window.removeEventListener("resize", handleResize);
     };
   }, []);
+
+  // const handleNewCheckboxChecked = () => {
+  //   setIsNewCheckboxChecked(props.newCheckboxChecked);
+  // }
 
   const handleToggle = () => {
     setToggle(!toggle);
@@ -122,7 +126,6 @@ const Sidebar = (props: any) => {
               {dataNavBar.map((item, index) => (
                 <div key={item.id}>
                   {index === dataNavBar.length - 1 && <Divider />}
-                  {/* Add a divider before the last item */}
                   <ListItemButton component="a" href="#">
                     <ListItem>
                       <ListItemIcon>{item.icon}</ListItemIcon>
@@ -137,7 +140,7 @@ const Sidebar = (props: any) => {
       ) : (
         <div className={`${toggle ? "w-[5.8rem]" : ""} taskbar-container`}>
           {/* <UserProfile toggle={toggle} /> */}
-          <TaskbarData toggle={toggle} handleClick={props.handleClick} />
+          <TaskbarData toggle={toggle} handleClick={props.handleClick} newCheckboxChecked={props.newCheckboxChecked} />
           <div
             className="absolute -left-5 top-[7rem] flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-glass"
             onClick={handleToggle}

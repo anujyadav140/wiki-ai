@@ -5,8 +5,7 @@ import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 import Sidebar from "./sidebar/sidebar";
 import toast, { Toaster } from "react-hot-toast";
 import parse from "html-react-parser";
-import { ChatOpenAI } from "langchain/chat_models/openai";
-import { HumanMessage, SystemMessage } from "langchain/schema";
+import { ChatPromptTemplate, HumanMessagePromptTemplate, SystemMessagePromptTemplate } from "langchain/prompts";
 
 interface Section {
   heading: string;
@@ -137,6 +136,8 @@ export default function MainContent(props: any) {
   const [selectedHeadings, setSelectedHeadings] = useState<string[]>([]);
   const [toDoSummaryText, setToDoSummaryText] = useState("");
   const [summary, setSummary] = useState("");
+  const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
+  const [newCheckboxChecked, setNewCheckboxChecked] = useState(false);
 
   useEffect(() => {
     getContentIntro(props.link, props.name, setIntroExtracts);
@@ -213,19 +214,33 @@ export default function MainContent(props: any) {
   };
 
   const generateSummary = async (buttonText: string) => {
-    console.log(buttonText);
+    if (isCheckboxChecked) {
+      console.log(buttonText);
     // const chat = new ChatOpenAI({
     //   openAIApiKey: "",
     //   temperature: 0,
     // });
-    // const response = await chat.call([
-    //   new SystemMessage(
-    //     "You are a very helpful summarizer, you will summarize 1000s of words of text in bullet points"
-    //   ),
-    //   new HumanMessage(toDoSummaryText),
+
+    const template = "You are a very helpful summarizer, you will summarize 1000s of words of text in {instruction}";
+    const summaryPrompt = ChatPromptTemplate.fromPromptMessages([
+      SystemMessagePromptTemplate.fromTemplate(template),
+      HumanMessagePromptTemplate.fromTemplate("{toDoSummaryText}"),
+    ]);
+
+    console.log(summaryPrompt);
+    
+    // const summaryResponse = await chat.generatePrompt([
+    //   await summaryPrompt.formatPromptValue({
+    //     instruction: buttonText,
+    //     toDoSummaryText: toDoSummaryText,
+    //   }),
     // ]);
-    // setSummary(response.lc_kwargs.content);
-    // console.log(response.lc_kwargs.content);
+    const summaryResponse = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tempor aliquam nunc, id consequat diam fermentum vel. Vestibulum porta neque sed massa maximus varius. Duis nec ipsum sem. Curabitur ullamcorper est vel nibh cursus, a interdum ante cursus. Morbi facilisis ullamcorper sem, ut semper elit scelerisque at. Donec interdum cursus leo, eget venenatis metus ullamcorper at. Aenean non mi augue. Pellentesque sagittis viverra dui, et tincidunt erat pulvinar vitae. Proin at ipsum quis ligula venenatis facilisis eu nec quam. Sed vel purus nec dui varius consectetur. Nulla facilisi. Ut ut felis mauris. Proin gravida ante id leo tincidunt, a vestibulum arcu lacinia. Donec id sapien sed felis suscipit congue in sit amet lacus.`
+    console.log(summaryResponse);
+    // setSummary(summaryResponse.generations[0][0].text);
+    setSummary(summaryResponse);
+    setNewCheckboxChecked(false);
+    }
   };
 
   const extractTextFromHtml = (node: any): string => {
@@ -242,6 +257,11 @@ export default function MainContent(props: any) {
   };
 
   const handleMainSectionClick = (index: number) => {
+    setIsCheckboxChecked(true);
+    if (isCheckboxChecked) {
+      setNewCheckboxChecked(true);
+      console.log("New Checkbox Checked!");
+    }
     setHeadingExtracts((prevExtracts) => {
       const updatedExtracts = [...prevExtracts];
       const section = updatedExtracts[index];
@@ -288,6 +308,7 @@ export default function MainContent(props: any) {
   };
 
   const handleSubSectionClick = (mainIndex: number, subIndex: number) => {
+    setIsCheckboxChecked(true);
     setHeadingExtracts((prevExtracts) => {
       const updatedExtracts = [...prevExtracts];
       const section = updatedExtracts[mainIndex];
@@ -325,6 +346,8 @@ export default function MainContent(props: any) {
       toast(
         "You have to select atleast one section for the AI generation to work"
       );
+    } else if (selectedHeadings.length !== 0) {
+      setIsCheckboxChecked(true);
     }
   };
 
@@ -466,7 +489,7 @@ export default function MainContent(props: any) {
       </div>
       <div className="right-0 top-0 h-screen">
         <button onClick={notify}>
-          <Sidebar taskBar="isTaskBar" right="isRight" handleClick={generateSummary} />
+          <Sidebar taskBar="isTaskBar" right="isRight" handleClick={generateSummary} newCheckboxChecked={newCheckboxChecked} />
         </button>
         <Toaster />
       </div>

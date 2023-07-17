@@ -104,7 +104,7 @@ function Tab() {
           </button>
         </LightTooltip>
         <LightTooltip
-          title="Find keywords in wiki sections to find contextual articles"
+          title="Summary in poetry format"
           placement="top"
           arrow
         >
@@ -121,7 +121,29 @@ function Tab() {
           >
             <VscSymbolKeyword className="mr-1" />
             {!isMobileScreen && (
-              <span className="text-black">Keyword Search</span>
+              <span className="text-black">Poetic Form</span>
+            )}
+          </button>
+        </LightTooltip>
+        <LightTooltip
+          title="Summary with emojis"
+          placement="top"
+          arrow
+        >
+          <button
+            role="tab"
+            aria-selected={activeTab === 3}
+            aria-controls="panel-4"
+            id="tab-4"
+            tabIndex={activeTab === 3 ? 0 : -1}
+            onMouseEnter={() => changeTab(2)}
+            className={`tab relative flex h-10 items-center rounded-full px-6 ${
+              activeTab === 3 ? "bg-white text-black" : "text-black"
+            }`}
+          >
+            <VscSymbolKeyword className="mr-1" />
+            {!isMobileScreen && (
+              <span className="text-black">Emoji 😃</span>
             )}
           </button>
         </LightTooltip>
