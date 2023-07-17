@@ -10,7 +10,10 @@ import {
   HumanMessagePromptTemplate,
   SystemMessagePromptTemplate,
 } from "langchain/prompts";
-
+import { ChatOpenAI } from "langchain/chat_models/openai";
+import Lottie from "react-lottie-player";
+import lottieJson from "../../public/loader.json";
+import { TypeAnimation } from "react-type-animation";
 interface Section {
   heading: string;
   subSections: { heading: string; selected: boolean }[];
@@ -141,7 +144,10 @@ export default function MainContent(props: any) {
   const [toDoSummaryText, setToDoSummaryText] = useState("");
   const [isCheckboxChecked, setIsCheckboxChecked] = useState(false);
   const [newCheckboxChecked, setNewCheckboxChecked] = useState(false);
+  const [isGenerateSummaryButtonClicked, setIsGenerateSummaryButtonClicked] =
+    useState(false);
   const [generatedSummary, setGeneratedSummary] = useState("");
+  const [isLoadingState, setIsLoadingState] = useState(true);
 
   useEffect(() => {
     getContentIntro(props.link, props.name, setIntroExtracts);
@@ -203,8 +209,6 @@ export default function MainContent(props: any) {
                 ""
               );
 
-              // console.log(cleanedSectionText);
-              // generateSummary(cleanedSectionText);
               setToDoSummaryText(cleanedSectionText);
             } catch (error) {
               console.error("Error fetching section HTML:", error);
@@ -218,12 +222,16 @@ export default function MainContent(props: any) {
   };
 
   const generateSummary = async (buttonText: string) => {
+    setIsGenerateSummaryButtonClicked(true);
+    if (isGenerateSummaryButtonClicked) {
+      setIsLoadingState(true);
+    }
     if (isCheckboxChecked) {
       console.log(buttonText);
-      // const chat = new ChatOpenAI({
-      //   openAIApiKey: "",
-      //   temperature: 0,
-      // });
+      const chat = new ChatOpenAI({
+        openAIApiKey: "",
+        temperature: 0,
+      });
 
       const template =
         "You are a very helpful summarizer, you will summarize 1000s of words of text in {instruction}";
@@ -234,16 +242,20 @@ export default function MainContent(props: any) {
 
       console.log(summaryPrompt);
 
-      // const summaryResponse = await chat.generatePrompt([
-      //   await summaryPrompt.formatPromptValue({
-      //     instruction: buttonText,
-      //     toDoSummaryText: toDoSummaryText,
-      //   }),
-      // ]);
-      const summaryResponse = `Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed tempor aliquam nunc, id consequat diam fermentum vel. Vestibulum porta neque sed massa maximus varius. Duis nec ipsum sem. Curabitur ullamcorper est vel nibh cursus, a interdum ante cursus. Morbi facilisis ullamcorper sem, ut semper elit scelerisque at. Donec interdum cursus leo, eget venenatis metus ullamcorper at. Aenean non mi augue. Pellentesque sagittis viverra dui, et tincidunt erat pulvinar vitae. Proin at ipsum quis ligula venenatis facilisis eu nec quam. Sed vel purus nec dui varius consectetur. Nulla facilisi. Ut ut felis mauris. Proin gravida ante id leo tincidunt, a vestibulum arcu lacinia. Donec id sapien sed felis suscipit congue in sit amet lacus.`;
-      console.log(summaryResponse);
-      // setSummary(summaryResponse.generations[0][0].text);
-      setGeneratedSummary(summaryResponse);
+      const summaryResponse = await chat.generatePrompt([
+        await summaryPrompt.formatPromptValue({
+          instruction: buttonText,
+          toDoSummaryText: toDoSummaryText,
+        }),
+      ]);
+
+      setGeneratedSummary(summaryResponse.generations[0][0].text);
+
+      if (summaryResponse.generations[0][0].text === "") {
+        setIsLoadingState(true);
+      } else {
+        setIsLoadingState(false);
+      }
       setNewCheckboxChecked(false);
     }
   };
@@ -262,7 +274,9 @@ export default function MainContent(props: any) {
   };
 
   const handleMainSectionClick = (index: number) => {
+    setIsGenerateSummaryButtonClicked(false);
     setIsCheckboxChecked(true);
+    setIsLoadingState(true);
     if (isCheckboxChecked) {
       setGeneratedSummary("");
       setNewCheckboxChecked(true);
@@ -314,7 +328,9 @@ export default function MainContent(props: any) {
   };
 
   const handleSubSectionClick = (mainIndex: number, subIndex: number) => {
+    setIsGenerateSummaryButtonClicked(false);
     setIsCheckboxChecked(true);
+    setIsLoadingState(true);
     if (isCheckboxChecked) {
       setGeneratedSummary("");
       setNewCheckboxChecked(true);
@@ -327,21 +343,21 @@ export default function MainContent(props: any) {
         const subSection = section.subSections[subIndex];
         if (subSection) {
           subSection.selected = !subSection.selected;
-
-          const selectedHeadings = updatedExtracts.flatMap((section) => {
+  
+          const selectedHeadings = updatedExtracts.flatMap((section, idx) => {
+            if (idx !== mainIndex) {
+              section.selected = false;
+              section.subSections.forEach((sub) => {
+                sub.selected = false;
+              });
+            }
             if (section.subSections.some((sub) => sub.selected)) {
               section.selected = true;
               return section.subSections
                 .filter((sub) => sub.selected)
                 .map((sub) => sub.heading);
-            } else if (section.subSections.every((sub) => !sub.selected)) {
-              section.selected = false;
-              return [];
             } else {
-              section.selected = false;
-              return section.subSections
-                .filter((sub) => sub.selected)
-                .map((sub) => sub.heading);
+              return [];
             }
           });
           setSelectedHeadings(selectedHeadings);
@@ -351,6 +367,7 @@ export default function MainContent(props: any) {
       return updatedExtracts;
     });
   };
+  
 
   const notify = () => {
     if (selectedHeadings.length === 0) {
@@ -421,7 +438,7 @@ export default function MainContent(props: any) {
                     className={`my-6 rounded-md bg-purple-300 px-8 py-5 text-base ${
                       subSection.selected ? "border-2 border-indigo-500" : ""
                     }`}
-                    // whileHover={{ scale: 1.03 }} 
+                    // whileHover={{ scale: 1.03 }}
                   >
                     {subSection.heading.replace(/<[^>]+>/g, "")}
                   </motion.p>
@@ -484,7 +501,7 @@ export default function MainContent(props: any) {
                     className={`my-6 rounded-md bg-purple-300 px-8 py-5 text-base ${
                       subSection.selected ? "border-2 border-indigo-500" : ""
                     }`}
-                    whileHover={{ scale: 1.03 }} 
+                    whileHover={{ scale: 1.03 }}
                   >
                     <input
                       type="checkbox"
@@ -496,9 +513,39 @@ export default function MainContent(props: any) {
                   </motion.p>
                 )
               )}
-            {section.selected && (
-              <div className="summary-container">
-                <p>{generatedSummary}</p>
+            {section.selected && isGenerateSummaryButtonClicked && (
+              <div className="my-6 rounded-md bg-white px-8 py-5 text-base">
+                <div className="whitespace-pre-wrap flex flex-col items-center justify-center">
+                  {isLoadingState && (
+                    <Lottie
+                      loop
+                      animationData={lottieJson}
+                      play
+                      style={{ width: 200, height: 200 }}
+                    />
+                  )}
+                  {isLoadingState && (
+                    <TypeAnimation
+                      sequence={[
+                        "Loading ...",
+                        1000,
+                        "Please be patient ...",
+                        1000,
+                        "Generating response ...",
+                        1000,
+                      ]}
+                      wrapper="span"
+                      speed={50}
+                      repeat={Infinity}
+                      className="text-base"
+                    />
+                  )}
+                  {!isLoadingState && (
+                    <p className="my-6 rounded-md bg-white px-8 py-5 text-base">
+                      {generatedSummary}
+                    </p>
+                  )}
+                </div>
               </div>
             )}
           </motion.div>
