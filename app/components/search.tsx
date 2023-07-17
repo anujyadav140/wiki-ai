@@ -17,7 +17,7 @@ const Search = (props: any) => {
     const query = event.target.value;
     setSearchQuery(query);
 
-    if (query.length <= 3) {
+    if (query.length <= 3 || query.length == 0) {
       setRenderAnimation(true);
       props.handleChange(renderAnimation);
     }
