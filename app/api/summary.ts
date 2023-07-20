@@ -4,7 +4,7 @@ import { ChatPromptTemplate, HumanMessagePromptTemplate, SystemMessagePromptTemp
 
 const langchanSummary = async (buttonText: string, toDoSummaryText: string) => {
     const chat = new ChatOpenAI({
-        openAIApiKey: "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",
+        openAIApiKey: "",
         temperature: 0,
       });
       const template =
