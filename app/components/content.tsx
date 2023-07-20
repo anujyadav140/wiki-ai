@@ -14,6 +14,7 @@ import { ChatOpenAI } from "langchain/chat_models/openai";
 import Lottie from "react-lottie-player";
 import lottieJson from "../../public/loader.json";
 import { TypeAnimation } from "react-type-animation";
+import langchanSummary from "../api/summary";
 interface Section {
   heading: string;
   subSections: { heading: string; selected: boolean }[];
@@ -228,29 +229,8 @@ export default function MainContent(props: any) {
     }
     if (isCheckboxChecked) {
       console.log(buttonText);
-      const chat = new ChatOpenAI({
-        openAIApiKey: "",
-        temperature: 0,
-      });
-
-      const template =
-        "You are a very helpful summarizer, you will summarize 1000s of words of text in {instruction}";
-      const summaryPrompt = ChatPromptTemplate.fromPromptMessages([
-        SystemMessagePromptTemplate.fromTemplate(template),
-        HumanMessagePromptTemplate.fromTemplate("{toDoSummaryText}"),
-      ]);
-
-      console.log(summaryPrompt);
-
-      const summaryResponse = await chat.generatePrompt([
-        await summaryPrompt.formatPromptValue({
-          instruction: buttonText,
-          toDoSummaryText: toDoSummaryText,
-        }),
-      ]);
-
+      const summaryResponse = await langchanSummary(buttonText, toDoSummaryText);
       setGeneratedSummary(summaryResponse.generations[0][0].text);
-
       if (summaryResponse.generations[0][0].text === "") {
         setIsLoadingState(true);
       } else {

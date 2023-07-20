@@ -7,10 +7,9 @@ import { ChatOpenAI } from "langchain/chat_models/openai";
 import { HumanMessage, SystemMessage } from "langchain/schema";
 
 export default async function LangchainFunc(props: any) {
-  require("dotenv").config();
-  const apiKey = process.env.OPENAI_API_KEY;
+
   //   const model = new OpenAI({openAIApiKey: apiKey, temperature: 0.9});
-  const chat = new ChatOpenAI({ openAIApiKey: apiKey, temperature: 0 });
+  // const chat = new ChatOpenAI({ openAIApiKey: apiKey, temperature: 0 });
 
   //   const template = "What is a good name for a company that makes {product}?";
   //   const prompt = new PromptTemplate({
@@ -45,12 +44,12 @@ export default async function LangchainFunc(props: any) {
   Ere half my days, in this dark world and wide,
   And that one Talent which is death to`;
   
-  const response = await chat.call([
-    new SystemMessage(instructions),
-    new HumanMessage(poem),
-  ]);
+  // const response = await chat.call([
+  //   new SystemMessage(instructions),
+  //   new HumanMessage(poem),
+  // ]);
 
-  console.log(response.lc_kwargs.content);
+  // console.log(response.lc_kwargs.content);
 
 // const text = 'Hello, world!'
 // const tokenLimit = 10
