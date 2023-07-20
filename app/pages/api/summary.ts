@@ -1,10 +1,11 @@
 import { ChatOpenAI } from "langchain/chat_models/openai";
 import { ChatPromptTemplate, HumanMessagePromptTemplate, SystemMessagePromptTemplate } from "langchain/prompts";
 
-
 const langchanSummary = async (buttonText: string, toDoSummaryText: string) => {
+  const API_KEY = process.env.NEXT_PUBLIC_API_KEY as string;
+  console.log(API_KEY);
     const chat = new ChatOpenAI({
-        openAIApiKey: "",
+        openAIApiKey: API_KEY,
         temperature: 0,
       });
       const template =

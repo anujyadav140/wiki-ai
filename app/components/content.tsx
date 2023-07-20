@@ -14,7 +14,8 @@ import { ChatOpenAI } from "langchain/chat_models/openai";
 import Lottie from "react-lottie-player";
 import lottieJson from "../../public/loader.json";
 import { TypeAnimation } from "react-type-animation";
-import langchanSummary from "../api/summary";
+import langchanSummary from "../pages/api/summary";
+
 interface Section {
   heading: string;
   subSections: { heading: string; selected: boolean }[];
