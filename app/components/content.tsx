@@ -373,9 +373,6 @@ export default function MainContent(props: any) {
     console.log(selectedHeadings);
   }, [selectedHeadings]);
 
-  const applySmallFont = (className: string) =>
-    isMobileScreen ? `${className} small-font` : className;
-
   return (
     <>
       <div
