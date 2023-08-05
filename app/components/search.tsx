@@ -225,13 +225,21 @@ const Search = (props: any) => {
               </div>
             </div>
           </form>
-
           <div className="w-100 mb-10 mt-2 max-h-80">
             <div className="mb-10 mt-2 max-h-screen flex-grow overflow-y-auto overflow-x-hidden rounded-md scrollbar-thin scrollbar-thumb-indigo-600 hover:overflow-x-visible">
               {suggestions.length > 0 && (
                 <ul className="mt-4 grid h-full w-full gap-4">
                   {suggestions.map((suggestion, index) => (
-                    <Link href={`/wiki/${suggestion}`} key={index}>
+                     <Link
+                     href={{
+                       pathname: `/wiki/${suggestion}`,
+                       query: {
+                         wikiName: `${suggestion}`,
+                         linkUrl: `${links[index]}`,
+                       },
+                     }}
+                     key={index}
+                   >
                       <motion.div
                         whileHover={{ scale: 1.02 }}
                         transition={{

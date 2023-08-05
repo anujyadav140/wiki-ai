@@ -150,6 +150,13 @@ export default function MainContent(props: any) {
     useState(false);
   const [generatedSummary, setGeneratedSummary] = useState("");
   const [isLoadingState, setIsLoadingState] = useState(true);
+  const [isMobileScreen, setIsMobileScreen] = useState(false);
+
+  useEffect(() => {
+    if (window.innerWidth < 740) {
+      setIsMobileScreen(true);
+    }
+  }, []);
 
   useEffect(() => {
     getContentIntro(props.link, props.name, setIntroExtracts);
@@ -230,7 +237,10 @@ export default function MainContent(props: any) {
     }
     if (isCheckboxChecked) {
       console.log(buttonText);
-      const summaryResponse = await langchanSummary(buttonText, toDoSummaryText);
+      const summaryResponse = await langchanSummary(
+        buttonText,
+        toDoSummaryText
+      );
       setGeneratedSummary(summaryResponse.generations[0][0].text);
       if (summaryResponse.generations[0][0].text === "") {
         setIsLoadingState(true);
@@ -324,7 +334,7 @@ export default function MainContent(props: any) {
         const subSection = section.subSections[subIndex];
         if (subSection) {
           subSection.selected = !subSection.selected;
-  
+
           const selectedHeadings = updatedExtracts.flatMap((section, idx) => {
             if (idx !== mainIndex) {
               section.selected = false;
@@ -348,7 +358,6 @@ export default function MainContent(props: any) {
       return updatedExtracts;
     });
   };
-  
 
   const notify = () => {
     if (selectedHeadings.length === 0) {
@@ -364,11 +373,22 @@ export default function MainContent(props: any) {
     console.log(selectedHeadings);
   }, [selectedHeadings]);
 
+  const applySmallFont = (className: string) =>
+    isMobileScreen ? `${className} small-font` : className;
+
   return (
     <>
-      <div className="scrollbar-track shadow-indigo ml-auto mr-auto max-h-screen w-2/3 overflow-y-auto overflow-x-hidden rounded-xl bg-gradient-to-br from-purple-200 to-transparent via-purple-300 p-4 text-sm font-medium text-black shadow-xl scrollbar-thin scrollbar-thumb-indigo-600">
+      <div
+        className="scrollbar-track shadow-indigo ml-auto mr-auto max-h-screen w-2/3 
+      overflow-y-auto overflow-x-hidden rounded-xl bg-gradient-to-br from-purple-200 to-transparent 
+      via-purple-300 p-4 text-sm font-medium text-black shadow-xl scrollbar-thin scrollbar-thumb-indigo-600"
+      >
         {/* <p>{summary}</p> */}
-        <h1 className="font-serif text-2xl font-bold text-black">
+        <h1
+          className={`font-serif text-2xl font-bold text-black ${
+            isMobileScreen ? "text-sm" : ""
+          }`}
+        >
           {props.name}
         </h1>
         <Divider className="bg-black" />
@@ -386,16 +406,26 @@ export default function MainContent(props: any) {
           <motion.div
             key={index}
             layout
-            className={`my-6 rounded-3xl border-glass bg-glass px-8 py-5 hover:bg-violet-400 ${
-              openHeadingIndexes.includes(index) ? "bg-blue-100" : ""
-            } ${section.selected ? "border-2 border-indigo-500" : ""}`}
+            className={`my-6 rounded-3xl border-glass bg-glass px-8 py-5
+          hover:bg-violet-400 ${
+            openHeadingIndexes.includes(index) ? "bg-blue-100" : ""
+          } 
+          ${section.selected ? "border-2 border-indigo-500" : ""} ${
+              isMobileScreen ? "text-sm" : ""
+            }`}
           >
-            <div className="flex items-center justify-between font-serif text-xl font-semibold text-black">
+            <div
+              className={`flex items-center justify-between font-serif ${
+                isMobileScreen ? "text-sm" : "text-xl"
+              } 
+           font-semibold text-black`}
+            >
               <motion.h2 layout>
                 {section.heading.replace(/<[^>]+>/g, "")}
               </motion.h2>
               <div
-                className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full bg-gray-200 hover:bg-purple-300 active:bg-gray-400"
+                className="flex h-8 w-8 cursor-pointer items-center justify-center rounded-full
+                 bg-gray-200 hover:bg-purple-300 active:bg-gray-400"
                 onClick={(e) => {
                   e.stopPropagation();
                   handleIntroClick();
@@ -416,10 +446,11 @@ export default function MainContent(props: any) {
                 ) => (
                   <motion.p
                     key={subIndex}
-                    className={`my-6 rounded-md bg-purple-300 px-8 py-5 text-base ${
+                    className={`my-6 rounded-md bg-purple-300 px-8 py-5 ${
+                      isMobileScreen ? "text-sm" : "text-base"
+                    } ${
                       subSection.selected ? "border-2 border-indigo-500" : ""
                     }`}
-                    // whileHover={{ scale: 1.03 }}
                   >
                     {subSection.heading.replace(/<[^>]+>/g, "")}
                   </motion.p>
@@ -432,13 +463,19 @@ export default function MainContent(props: any) {
           <motion.div
             key={index}
             layout
-            className={`my-6 rounded-3xl border-glass bg-glass px-8 py-5 hover:bg-violet-400 ${
-              openHeadingIndexes.includes(index) ? "bg-blue-100" : ""
-            } ${section.selected ? "border-2 border-indigo-500" : ""}`}
+            className={`my-6 rounded-3xl border-glass bg-glass px-8 py-5 
+         hover:bg-violet-400 ${
+           openHeadingIndexes.includes(index) ? "bg-blue-100" : ""
+         } 
+         ${section.selected ? "border-2 border-indigo-500" : ""} ${
+              isMobileScreen ? "text-sm" : ""
+            }`}
           >
             <div className="flex items-center justify-between">
               <motion.h2
-                className="flex items-center justify-between font-serif text-xl font-semibold text-black"
+                className={`flex items-center justify-between font-serif font-semibold text-black ${
+                  isMobileScreen ? "text-sm" : "text-xl"
+                }`}
                 layout
               >
                 <input
@@ -479,10 +516,11 @@ export default function MainContent(props: any) {
                 ) => (
                   <motion.p
                     key={subIndex}
-                    className={`my-6 rounded-md bg-purple-300 px-8 py-5 text-base ${
+                    className={`my-6 rounded-md bg-purple-300 px-8 py-5 ${
                       subSection.selected ? "border-2 border-indigo-500" : ""
                     }`}
                     whileHover={{ scale: 1.03 }}
+                    style={{ fontSize: isMobileScreen ? "0.875rem" : "1rem" }}
                   >
                     <input
                       type="checkbox"
@@ -495,7 +533,12 @@ export default function MainContent(props: any) {
                 )
               )}
             {section.selected && isGenerateSummaryButtonClicked && (
-              <div className="my-6 rounded-md bg-white px-8 py-5 text-base">
+              <div
+                className={`my-6 rounded-md bg-white px-8 py-5 ${
+                  isMobileScreen ? "text-sm" : "text-base"
+                }`}
+                style={{ fontSize: isMobileScreen ? "0.875rem" : "1rem" }}
+              >
                 <div className="whitespace-pre-wrap flex flex-col items-center justify-center">
                   {isLoadingState && (
                     <Lottie
@@ -506,23 +549,31 @@ export default function MainContent(props: any) {
                     />
                   )}
                   {isLoadingState && (
-                    <TypeAnimation
-                      sequence={[
-                        "Loading ...",
-                        1000,
-                        "Please be patient ...",
-                        1000,
-                        "Generating response ...",
-                        1000,
-                      ]}
-                      wrapper="span"
-                      speed={50}
-                      repeat={Infinity}
-                      className="text-base"
-                    />
+                    <div
+                      className={`${isMobileScreen ? "text-sm" : "text-base"}`}
+                    >
+                      <TypeAnimation
+                        sequence={[
+                          "Loading ...",
+                          1000,
+                          "Please be patient ...",
+                          1000,
+                          "Generating response ...",
+                          1000,
+                        ]}
+                        wrapper="span"
+                        speed={50}
+                        repeat={Infinity}
+                      />
+                    </div>
                   )}
+
                   {!isLoadingState && (
-                    <p className="my-6 rounded-md bg-white px-8 py-5 text-base">
+                    <p
+                      className={`my-6 rounded-md bg-white px-8 py-5 ${
+                        isMobileScreen ? "text-sm" : "text-base"
+                      }`}
+                    >
                       {generatedSummary}
                     </p>
                   )}
