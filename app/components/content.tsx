@@ -376,9 +376,10 @@ export default function MainContent(props: any) {
   return (
     <>
       <div
-        className="scrollbar-track shadow-indigo ml-auto mr-auto max-h-screen w-2/3 
+        className={`scrollbar-track shadow-indigo ml-auto mr-auto max-h-screen
       overflow-y-auto overflow-x-hidden rounded-xl bg-gradient-to-br from-purple-200 to-transparent 
-      via-purple-300 p-4 text-sm font-medium text-black shadow-xl scrollbar-thin scrollbar-thumb-indigo-600"
+      via-purple-300 p-4 text-sm font-medium text-black shadow-xl scrollbar-thin scrollbar-thumb-indigo-600
+      ${isMobileScreen ? "" : "w-2/3"}`}
       >
         {/* <p>{summary}</p> */}
         <h1
