@@ -1,4 +1,3 @@
-import { Divider } from "@mui/material";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
@@ -15,7 +14,14 @@ import Lottie from "react-lottie-player";
 import lottieJson from "../../public/loader.json";
 import { TypeAnimation } from "react-type-animation";
 import langchanSummary from "../pages/api/summary";
-
+import { BiAlignLeft, BiImages } from "react-icons/bi";
+import Drawer from "@mui/material/Drawer";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
+import ListItemText from "@mui/material/ListItemText";
+import { dataTaskBar } from "./sidebar/data";
+import ListItemIcon from "@mui/material/ListItemIcon/ListItemIcon";
+import { Divider, ListItemButton } from "@mui/material";
 interface Section {
   heading: string;
   subSections: { heading: string; selected: boolean }[];
@@ -151,6 +157,11 @@ export default function MainContent(props: any) {
   const [generatedSummary, setGeneratedSummary] = useState("");
   const [isLoadingState, setIsLoadingState] = useState(true);
   const [isMobileScreen, setIsMobileScreen] = useState(false);
+  const [toggle, setToggle] = useState(true);
+
+  const handleToggle = () => {
+    setToggle(!toggle);
+  };
 
   useEffect(() => {
     if (window.innerWidth < 740) {
@@ -381,14 +392,21 @@ export default function MainContent(props: any) {
       via-purple-300 p-4 text-sm font-medium text-black shadow-xl scrollbar-thin scrollbar-thumb-indigo-600
       ${isMobileScreen ? "" : "w-2/3"}`}
       >
-        {/* <p>{summary}</p> */}
-        <h1
-          className={`font-serif text-2xl font-bold text-black ${
-            isMobileScreen ? "text-sm" : ""
-          }`}
-        >
+        <div className="flex items-center justify-between">
+        <h1 className={`font-serif text-2xl font-bold text-black ${isMobileScreen ? "text-sm" : ""}`}>
           {props.name}
         </h1>
+        {/* Button to toggle Drawer visibility */}
+        {isMobileScreen && (
+        <button
+        onClick={handleToggle}
+        className="flex items-center px-2 py-2 space-x-2 border rounded-md text-black bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300"
+      >
+        <BiAlignLeft className="text-xl" />
+        <span>Wikipedia Tools</span>
+      </button>
+        )}
+      </div>
         <Divider className="bg-black" />
         <h1>
           <a
@@ -581,6 +599,38 @@ export default function MainContent(props: any) {
           </motion.div>
         ))}
       </div>
+      {isMobileScreen ? (
+        // Render the Drawer if isMobileScreen is true
+        <Drawer
+          // ... (pass required props to Drawer component)
+          // For example: taskBar="isTaskBar" right="isRight" handleClick={generateSummary} newCheckboxChecked={newCheckboxChecked}
+          open={!toggle}
+          onClose={handleToggle}
+          anchor="left"
+          PaperProps={{
+            style: {
+              backgroundColor: "white",
+              borderTopRightRadius: 10,
+              borderBottomRightRadius: 10,
+            },
+          }}
+        >
+          <List>
+              {dataTaskBar.map((item, index) => (
+                <div key={item.id}>
+                  {index === dataTaskBar.length - 1}
+                  <ListItemButton component="a" href="#">
+                    <ListItem>
+                      <ListItemIcon>{item.icon}</ListItemIcon>
+                      <ListItemText primary={item.text} />
+                    </ListItem>
+                  </ListItemButton>
+                  <Divider />
+                </div>
+              ))}
+            </List>
+          </Drawer>
+      ) : (
       <div className="right-0 top-0 h-screen">
         <button onClick={notify}>
           <Sidebar
@@ -592,6 +642,7 @@ export default function MainContent(props: any) {
         </button>
         <Toaster />
       </div>
+      )}
     </>
-  );
+    );
 }
