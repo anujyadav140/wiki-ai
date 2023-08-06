@@ -422,11 +422,10 @@ export default function MainContent(props: any) {
         <h1 className={`font-serif text-2xl font-bold text-black ${isMobileScreen ? "text-sm" : ""}`}>
           {props.name}
         </h1>
-        {/* Button to toggle Drawer visibility */}
         {isMobileScreen && (
         <button
         onClick={handleToggle}
-        className="flex items-center px-2 py-2 space-x-2 border rounded-md text-black bg-indigo-600 hover:bg-indigo-800 focus:outline-none focus:ring focus:ring-blue-300"
+        className="flex items-center px-2 py-2 space-x-2 border rounded-md text-white bg-indigo-500 hover:bg-indigo-600 focus:outline-none focus:ring focus:ring-blue-300"
       >
         <BiAlignLeft className="text-xl" />
         <span>Wikipedia AI Tools</span>
