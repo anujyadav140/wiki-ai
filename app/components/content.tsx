@@ -380,6 +380,10 @@ export default function MainContent(props: any) {
     }
   };
 
+  const handleItemClick = (itemId: number) => {
+    console.log("Clicked item id:", itemId);
+  };
+
   useEffect(() => {
     console.log(selectedHeadings);
   }, [selectedHeadings]);
@@ -600,36 +604,36 @@ export default function MainContent(props: any) {
         ))}
       </div>
       {isMobileScreen ? (
-        // Render the Drawer if isMobileScreen is true
-        <Drawer
-          // ... (pass required props to Drawer component)
-          // For example: taskBar="isTaskBar" right="isRight" handleClick={generateSummary} newCheckboxChecked={newCheckboxChecked}
-          open={!toggle}
-          onClose={handleToggle}
-          anchor="left"
-          PaperProps={{
-            style: {
-              backgroundColor: "white",
-              borderTopRightRadius: 10,
-              borderBottomRightRadius: 10,
-            },
-          }}
-        >
-          <List>
-              {dataTaskBar.map((item, index) => (
-                <div key={item.id}>
-                  {index === dataTaskBar.length - 1}
-                  <ListItemButton component="a" href="#">
-                    <ListItem>
-                      <ListItemIcon>{item.icon}</ListItemIcon>
-                      <ListItemText primary={item.text} />
-                    </ListItem>
-                  </ListItemButton>
-                  <Divider />
-                </div>
-              ))}
-            </List>
-          </Drawer>
+       <Drawer
+       open={!toggle}
+       onClose={handleToggle}
+       anchor="left"
+       PaperProps={{
+         style: {
+           backgroundColor: "white",
+           borderTopRightRadius: 10,
+           borderBottomRightRadius: 10,
+         },
+       }}
+     >
+       <List>
+         {dataTaskBar.map((item) => (
+           <div key={item.id}>
+             <ListItemButton onClick={() => {
+               generateSummary(item.text);
+               notify();
+             }}>
+               <ListItem>
+                 <ListItemIcon>{item.icon}</ListItemIcon>
+                 <ListItemText primary={item.text} />
+               </ListItem>
+             </ListItemButton>
+             <Toaster />
+             <Divider />
+           </div>
+         ))}
+       </List>
+     </Drawer>
       ) : (
       <div className="right-0 top-0 h-screen">
         <button onClick={notify}>
