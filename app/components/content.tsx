@@ -164,15 +164,6 @@ export default function MainContent(props: any) {
     setToggle(!toggle);
   };
 
-  const handleDrawerClick = (index: number) => {
-    const clickedData = dataTaskBar[index].text;
-    setSelectedItem(index);
-    props.handleDrawerClick(clickedData);
-    // if (newCheckboxChecked) {
-    //   setSelectedItem(null);
-    // }
-  };
-
   useEffect(() => {
     if (window.innerWidth < 740) {
       setIsMobileScreen(true);
@@ -630,7 +621,6 @@ export default function MainContent(props: any) {
          {dataTaskBar.map((item) => (
            <div key={item.id}>
              <ListItemButton onClick={() => {
-               handleDrawerClick(item.id);
                generateSummary(item.text);
                notify();
              }}>
