@@ -158,10 +158,23 @@ export default function MainContent(props: any) {
   const [isLoadingState, setIsLoadingState] = useState(true);
   const [isMobileScreen, setIsMobileScreen] = useState(false);
   const [toggle, setToggle] = useState(true);
+  const [selectedItem, setSelectedItem] = useState<number | null>(null);
 
   const handleToggle = () => {
     setToggle(!toggle);
   };
+
+  const handleClick = (index: number) => {
+    const clickedData = dataTaskBar[index].text;
+    setSelectedItem(index);
+    props.handleClick(clickedData);
+  };
+
+  useEffect(() => {
+    if (newCheckboxChecked) {
+      setSelectedItem(null);
+    }
+  }, [newCheckboxChecked]);
 
   useEffect(() => {
     if (window.innerWidth < 740) {
@@ -620,6 +633,7 @@ export default function MainContent(props: any) {
          {dataTaskBar.map((item) => (
            <div key={item.id}>
              <ListItemButton onClick={() => {
+               handleClick(item.id);
                generateSummary(item.text);
                notify();
              }}>

@@ -32,10 +32,6 @@ const Sidebar = (props: any) => {
     };
   }, []);
 
-  // const handleNewCheckboxChecked = () => {
-  //   setIsNewCheckboxChecked(props.newCheckboxChecked);
-  // }
-
   const handleToggle = () => {
     setToggle(!toggle);
   };
