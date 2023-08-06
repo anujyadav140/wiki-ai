@@ -263,6 +263,27 @@ export default function MainContent(props: any) {
     }
   };
 
+  const generateSummaryForMobile = async (buttonText: string) => {
+    setIsGenerateSummaryButtonClicked(true);
+    if (isGenerateSummaryButtonClicked) {
+      setIsLoadingState(true);
+    }
+    if (isCheckboxChecked) {
+      console.log(buttonText);
+      const summaryResponse = await langchanSummary(
+        buttonText,
+        toDoSummaryText
+      );
+      setGeneratedSummary(summaryResponse.generations[0][0].text);
+      if (summaryResponse.generations[0][0].text === "") {
+        setIsLoadingState(true);
+      } else {
+        setIsLoadingState(false);
+      }
+      setNewCheckboxChecked(false);
+    }
+  };
+
   const extractTextFromHtml = (node: any): string => {
     if (typeof node === "string") {
       return node;
@@ -405,10 +426,10 @@ export default function MainContent(props: any) {
         {isMobileScreen && (
         <button
         onClick={handleToggle}
-        className="flex items-center px-2 py-2 space-x-2 border rounded-md text-black bg-blue-500 hover:bg-blue-600 focus:outline-none focus:ring focus:ring-blue-300"
+        className="flex items-center px-2 py-2 space-x-2 border rounded-md text-black bg-indigo-600 hover:bg-indigo-800 focus:outline-none focus:ring focus:ring-blue-300"
       >
         <BiAlignLeft className="text-xl" />
-        <span>Wikipedia Tools</span>
+        <span>Wikipedia AI Tools</span>
       </button>
         )}
       </div>
@@ -621,8 +642,9 @@ export default function MainContent(props: any) {
          {dataTaskBar.map((item) => (
            <div key={item.id}>
              <ListItemButton onClick={() => {
-               generateSummary(item.text);
+               generateSummaryForMobile(item.text);
                notify();
+               handleToggle();
              }}>
                <ListItem>
                  <ListItemIcon>{item.icon}</ListItemIcon>
