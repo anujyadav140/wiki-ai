@@ -168,9 +168,9 @@ export default function MainContent(props: any) {
     const clickedData = dataTaskBar[index].text;
     setSelectedItem(index);
     props.handleDrawerClick(clickedData);
-    if (newCheckboxChecked) {
-      setSelectedItem(null);
-    }
+    // if (newCheckboxChecked) {
+    //   setSelectedItem(null);
+    // }
   };
 
   useEffect(() => {
