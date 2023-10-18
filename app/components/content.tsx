@@ -402,10 +402,6 @@ export default function MainContent(props: any) {
     }
   };
 
-  const handleItemClick = (itemId: number) => {
-    console.log("Clicked item id:", itemId);
-  };
-
   useEffect(() => {
     console.log(selectedHeadings);
   }, [selectedHeadings]);
