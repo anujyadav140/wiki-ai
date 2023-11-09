@@ -62,7 +62,7 @@ const getContentIntro = async (
       }
     }
   } catch (error) {
-    console.error("Error fetching suggestions:", error);
+    console.error("Error fetching suggestions:",error);
   }
 };
 
