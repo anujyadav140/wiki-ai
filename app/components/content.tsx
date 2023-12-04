@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { FaAngleDown, FaAngleUp } from "react-icons/fa";
 import Sidebar from "./sidebar/sidebar";
-import toast, { Toaster } from "react-hot-toast";
+import toast, { Toaster, useToaster } from "react-hot-toast";
 import parse from "html-react-parser";
 import {
   ChatPromptTemplate,
@@ -62,7 +62,7 @@ const getContentIntro = async (
       }
     }
   } catch (error) {
-    console.error("Error fetching suggestions:",error);
+    console.error("Error fetching suggestions:", error);
   }
 };
 
@@ -415,19 +415,23 @@ export default function MainContent(props: any) {
       ${isMobileScreen ? "" : "w-2/3"}`}
       >
         <div className="flex items-center justify-between">
-        <h1 className={`font-serif text-2xl font-bold text-black ${isMobileScreen ? "text-sm" : ""}`}>
-          {props.name}
-        </h1>
-        {isMobileScreen && (
-        <button
-        onClick={handleToggle}
-        className="flex items-center px-2 py-2 space-x-2 border rounded-md text-white bg-indigo-500 hover:bg-indigo-600 focus:outline-none focus:ring focus:ring-blue-300"
-      >
-        <BiAlignLeft className="text-xl" />
-        <span>Wikipedia AI Tools</span>
-      </button>
-        )}
-      </div>
+          <h1
+            className={`font-serif text-2xl font-bold text-black ${
+              isMobileScreen ? "text-sm" : ""
+            }`}
+          >
+            {props.name}
+          </h1>
+          {isMobileScreen && (
+            <button
+              onClick={handleToggle}
+              className="flex items-center px-2 py-2 space-x-2 border rounded-md text-white bg-indigo-500 hover:bg-indigo-600 focus:outline-none focus:ring focus:ring-blue-300"
+            >
+              <BiAlignLeft className="text-xl" />
+              <span>Wikipedia AI Tools</span>
+            </button>
+          )}
+        </div>
         <Divider className="bg-black" />
         <h1>
           <a
@@ -516,17 +520,16 @@ export default function MainContent(props: any) {
                 layout
               >
                 <input
-                  type="checkbox"
-                  className="mr-2 h-4 w-4 text-indigo-500 rounded"
-                  checked={
-                    section.subSections.length > 0
-                      ? section.subSections.every(
-                          (subSection) => subSection.selected
-                        )
-                      : section.selected
-                  }
-                  onChange={() => handleMainSectionClick(index)}
-                />
+  type="radio"
+  name={`mainSectionRadio-${index}`}
+  className="mr-2 h-4 w-4 text-indigo-500 rounded"
+  checked={
+    section.subSections.length > 0
+      ? section.subSections.every((subSection) => subSection.selected)
+      : section.selected
+  }
+  onChange={() => handleMainSectionClick(index)}
+/>
                 {section.heading.replace(/<[^>]+>/g, "")}
               </motion.h2>
               {section.subSections.length > 0 && (
@@ -560,7 +563,8 @@ export default function MainContent(props: any) {
                     style={{ fontSize: isMobileScreen ? "0.875rem" : "1rem" }}
                   >
                     <input
-                      type="checkbox"
+                      type="radio"
+                      name={`subSectionRadio-${index}-${subIndex}`}
                       className="mr-2 h-4 w-4 text-indigo-500 rounded"
                       checked={subSection.selected}
                       onChange={() => handleSubSectionClick(index, subIndex)}
@@ -621,50 +625,52 @@ export default function MainContent(props: any) {
         ))}
       </div>
       {isMobileScreen ? (
-       <Drawer
-       open={!toggle}
-       onClose={handleToggle}
-       anchor="left"
-       PaperProps={{
-         style: {
-           backgroundColor: "white",
-           borderTopRightRadius: 10,
-           borderBottomRightRadius: 10,
-         },
-       }}
-     >
-       <List>
-         {dataTaskBar.map((item) => (
-           <div key={item.id}>
-             <ListItemButton onClick={() => {
-               generateSummaryForMobile(item.text);
-               notify();
-               handleToggle();
-             }}>
-               <ListItem>
-                 <ListItemIcon>{item.icon}</ListItemIcon>
-                 <ListItemText primary={item.text} />
-               </ListItem>
-             </ListItemButton>
-             <Toaster />
-             <Divider />
-           </div>
-         ))}
-       </List>
-     </Drawer>
+        <Drawer
+          open={!toggle}
+          onClose={handleToggle}
+          anchor="left"
+          PaperProps={{
+            style: {
+              backgroundColor: "white",
+              borderTopRightRadius: 10,
+              borderBottomRightRadius: 10,
+            },
+          }}
+        >
+          <List>
+            {dataTaskBar.map((item) => (
+              <div key={item.id}>
+                <ListItemButton
+                  onClick={() => {
+                    generateSummaryForMobile(item.text);
+                    notify();
+                    handleToggle();
+                  }}
+                >
+                  <ListItem>
+                    <ListItemIcon>{item.icon}</ListItemIcon>
+                    <ListItemText primary={item.text} />
+                  </ListItem>
+                </ListItemButton>
+                <Toaster />
+                <Divider />
+              </div>
+            ))}
+          </List>
+        </Drawer>
       ) : (
-      <div className="right-0 top-0 h-screen">
-        <button onClick={notify}>
-          <Sidebar
-            taskBar="isTaskBar"
-            right="isRight"
-            handleClick={generateSummary}
-            newCheckboxChecked={newCheckboxChecked}
-          />
-        </button>
-        <Toaster />
-      </div>
+        <div className="right-0 top-0 h-screen">
+          <button onClick={notify}>
+            <Sidebar
+              taskBar="isTaskBar"
+              right="isRight"
+              handleClick={generateSummary}
+              newCheckboxChecked={newCheckboxChecked}
+            />
+          </button>
+          <Toaster />
+        </div>
       )}
     </>
-    );
+  );
 }
